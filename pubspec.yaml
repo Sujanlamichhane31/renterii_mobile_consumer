@@ -97,6 +97,6 @@ flutter:
     - images/address/
     - images/icons/
     - images/payment/
-    - images/Restaurants/
+    # - images/Restaurants/
     - images/Banners/
-    - images/Food images/
+    # - images/Food images/
