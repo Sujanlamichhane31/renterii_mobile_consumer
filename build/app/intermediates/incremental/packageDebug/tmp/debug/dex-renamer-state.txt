@@ -28,12 +28,17 @@ renamed.16=classes17.dex
 path.18=classes_7.dex
 renamed.8=classes9.dex
 renamed.15=classes16.dex
+<<<<<<< HEAD
 path.19=classes_8.dex
+=======
+path.19=classes_13.dex
+>>>>>>> 14c4501138402ab755f9c9bc6f50aaa35c07fefc
 renamed.14=classes15.dex
 renamed.13=classes14.dex
 renamed.12=classes13.dex
 renamed.11=classes12.dex
 renamed.10=classes11.dex
+<<<<<<< HEAD
 base.17=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_6.dex
 base.16=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_5.dex
 base.15=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_4.dex
@@ -42,6 +47,16 @@ base.19=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\de
 base.18=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_7.dex
 base.20=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_9.dex
 base.21=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes2.dex
+=======
+base.17=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_9.dex
+base.16=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_8.dex
+base.15=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_7.dex
+base.14=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_6.dex
+base.19=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_13.dex
+base.18=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes2.dex
+base.20=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_14.dex
+base.21=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_15.dex
+>>>>>>> 14c4501138402ab755f9c9bc6f50aaa35c07fefc
 renamed.3=classes4.dex
 path.12=classes_15.dex
 renamed.2=classes3.dex
@@ -57,6 +72,7 @@ path.17=classes_6.dex
 renamed.5=classes6.dex
 path.14=classes_3.dex
 renamed.4=classes5.dex
+<<<<<<< HEAD
 path.15=classes_4.dex
 renamed.19=classes20.dex
 base.13=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_2.dex
@@ -65,3 +81,13 @@ path.20=classes_9.dex
 base.11=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_14.dex
 base.10=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_13.dex
 path.21=classes2.dex
+=======
+path.15=classes_7.dex
+renamed.19=classes20.dex
+base.13=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_5.dex
+base.12=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_4.dex
+path.20=classes_14.dex
+base.11=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_3.dex
+base.10=D\:\\Officework\\Renterii-Mobile-Consumer\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\classes_2.dex
+path.21=classes_15.dex
+>>>>>>> 14c4501138402ab755f9c9bc6f50aaa35c07fefc
