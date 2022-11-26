@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../shops/business_logic/cubit/shop_cubit.dart';
 import '../../business_logic/cubit/category_cubit.dart';
 
-class CategoriesListView extends StatelessWidget {
+class CategoriesListView extends StatefulWidget {
   final VoidCallback onTapCategory;
 
   const CategoriesListView({
@@ -13,6 +13,12 @@ class CategoriesListView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CategoriesListView> createState() => _CategoriesListViewState();
+}
+
+class _CategoriesListViewState extends State<CategoriesListView> {
+  @override
+  int _value = -1;
   Widget build(BuildContext context) {
     return Container(
       height: 50,
@@ -30,7 +36,11 @@ class CategoriesListView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Container(
-                        color: Theme.of(context).cardColor,
+                        decoration: BoxDecoration(
+                            color: _value == index
+                                ? Colors.blueAccent
+                                : Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(4.0)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,10 +63,19 @@ class CategoriesListView extends StatelessWidget {
                       ),
                     ),
                     onTap: () async {
+                      if (_value == index) {
+                        setState(() {
+                          _value = -1;
+                        });
+                      } else {
+                        setState(() {
+                          _value = index;
+                        });
+                      }
                       await context
                           .read<ShopCubit>()
                           .getShopsByCategory(state.categories[index].id!);
-                      onTapCategory();
+                      widget.onTapCategory();
                     },
                   );
                 });

@@ -155,6 +155,13 @@ class AuthDataProvider {
         'email': email ?? '',
         'phoneNumber': phoneNumber ?? '',
         'imageUrl': imageUrl ?? '',
+        'name': name ?? '',
+        'email': email ?? '',
+        'phoneNumber': phoneNumber ?? '',
+        'description': '',
+        'address': '',
+        'latitude': 0.0,
+        'longitude': 0.0,
       });
     } else {
       print('USER EXISTS');
@@ -166,6 +173,11 @@ class AuthDataProvider {
     String? email,
     String? phoneNumber,
     String? photoUrl,
+    String? description,
+    String? category,
+    String? address,
+    double? latitude,
+    double? longitude,
     required String userId,
   }) async {
     try {
@@ -178,6 +190,11 @@ class AuthDataProvider {
         'name': name ?? '',
         'email': email ?? '',
         'phoneNumber': phoneNumber ?? '',
+        'imageUrl': photoUrl ?? '',
+        'description': description ?? '',
+        'address': address ?? '',
+        'latitude': latitude ?? 0.0,
+        'longitude': longitude ?? 0.0,
       });
 
       // if (name != null) {

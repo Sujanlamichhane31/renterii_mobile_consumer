@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animation_wrappers/animation_wrappers.dart';
@@ -12,6 +13,7 @@ import 'package:renterii/authentication/presentation/widgets/bottom_bar.dart';
 import 'package:renterii/home/presentation/widgets/categories_list_view.dart';
 import 'package:renterii/home/presentation/widgets/shop_box.dart';
 import 'package:renterii/map_utils.dart';
+import 'package:renterii/rentals/business_logic/cubit/shops/shops_cubit.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
 
@@ -54,13 +56,39 @@ class _RenteriiMapState extends State<RenteriiMap> {
   GoogleMapController? mapController;
   double distanceBetween = 200.0;
   dynamic user;
-  
+
   double getDistance(double lat2, double lon2) {
-    if(user != null && user.latitude != null && user.longitude != null) {
-      return Geolocator.distanceBetween(user.latitude!, user.longitude!, lat2, lon2) / 1000;
-    }else {
+    if (user != null && user.latitude != null && user.longitude != null) {
+      return Geolocator.distanceBetween(
+              user.latitude!, user.longitude!, lat2, lon2) /
+          1000;
+    } else {
       return Geolocator.distanceBetween(32, 5, lat2, lon2) / 1000;
     }
+  }
+
+  List<Marker> markerList = [];
+
+  addMarker(List<Shop> result) {
+    markerList.clear();
+    for (var index = 0; index < result.length; index++) {
+      log("result: ${result[index].title},${result[index].address}");
+      if (result[index].lat != 0.0 && result[index].lng != 0.0) {
+        markerList.add(Marker(
+            markerId: MarkerId(result[index].id.toString()),
+            position: LatLng(
+              result[index].lat,
+              result[index].lng,
+            ),
+            infoWindow: InfoWindow(
+                title: "${result[index].title}, ${result[index].address}")));
+        log("latitude: ${result[index].lat}");
+      }
+    }
+    for (var i in markerList) {
+      log('marker: ${i.position.latitude}}');
+    }
+    return markerList;
   }
 
   @override
@@ -73,6 +101,12 @@ class _RenteriiMapState extends State<RenteriiMap> {
             userLongitude: user.longitude,
           ),
         );
+  }
+
+  @override
+  void dispose() {
+    mapController?.dispose();
+    super.dispose();
   }
 
   Future<LatLng> getCenter() async {
@@ -159,35 +193,86 @@ class _RenteriiMapState extends State<RenteriiMap> {
                           //     builder: (context, state) {
                           //   print('polyyyy' + state.polylines.toString());
                           //   return
-                          BlocBuilder<MapBloc, MapState>(
-                            buildWhen:
-                                (MapState prevState, MapState currState) =>
-                                    currState is MapMarkersLoading ||
-                                    currState is MapMarkersFetched,
-                            builder: (context, state) {
-                              if (state is MapMarkersFetched) {
-                                return GoogleMap(
-                                  // polylines: state.polylines,
-                                  markers: state.markers,
-                                  mapType: MapType.normal,
-                                  myLocationEnabled: true,
-                                  myLocationButtonEnabled: true,
-                                  onCameraMove: (cameraPosition) {},
-                                  initialCameraPosition: kGooglePlex,
-                                  // markers: _markers,
-                                  onMapCreated:
-                                      (GoogleMapController controller) async {
-                                    // _mapController.complete(controller);
-                                    mapController = controller;
-                                  },
-                                );
-                              } else {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                          ),
+                          // BlocBuilder<MapBloc, MapState>(
+                          //   buildWhen:
+                          //       (MapState prevState, MapState currState) =>
+                          //           currState is MapMarkersLoading ||
+                          //           currState is MapMarkersFetched,
+                          //   builder: (context, state) {
+                          //     if (state is MapMarkersFetched) {
+                          //       final marker = state.markers;
+                          //       return BlocBuilder<ShopCubit, ShopState>(
+                          //           builder: (context, state) {
+                          //         if (state is ShopLoaded) {
+                          //           addMarker(state.shops);
+
+                          //           return GoogleMap(
+                          //             // polylines: state.polylines,
+                          //             markers: Set<Marker>.of(markerList),
+                          //             mapType: MapType.normal,
+                          //             myLocationEnabled: true,
+                          //             myLocationButtonEnabled: true,
+                          //             onCameraMove: (cameraPosition) {},
+                          //             initialCameraPosition: kGooglePlex,
+                          //             // markers: _markers,
+                          //             onMapCreated: (GoogleMapController
+                          //                 controller) async {
+                          //               _mapController.complete(controller);
+                          //               // mapController = controller;
+                          //             },
+                          //           );
+                          //         }
+                          //         return Container();
+                          //       });
+                          //     } else {
+                          //       return const Center(
+                          //         child: CircularProgressIndicator(),
+                          //       );
+                          //     }
+                          //   },
+                          // ),
+                          BlocBuilder<ShopCubit, ShopState>(
+                              builder: (context, state) {
+                            if (state is ShopLoaded) {
+                              addMarker(state.shops);
+                              return GoogleMap(
+                                // polylines: state.polylines,
+                                markers: Set<Marker>.of(markerList),
+                                mapType: MapType.normal,
+                                // myLocationEnabled: true,
+                                // myLocationButtonEnabled: true,
+                                onCameraMove: (cameraPosition) {},
+                                initialCameraPosition: kGooglePlex,
+                                // markers: _markers,
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  _mapController.complete(controller);
+                                  // mapController = controller;
+                                },
+                              );
+                            } else if (state is ShopsByCategoryLoaded) {
+                              addMarker(state.shops);
+                              return GoogleMap(
+                                // polylines: state.polylines,
+                                markers: Set<Marker>.of(markerList),
+                                mapType: MapType.normal,
+                                myLocationEnabled: true,
+                                myLocationButtonEnabled: true,
+                                onCameraMove: (cameraPosition) {},
+                                initialCameraPosition: kGooglePlex,
+                                // markers: _markers,
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  _mapController.complete(controller);
+                                  // mapController = controller;
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          }),
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Column(
@@ -240,29 +325,29 @@ class _RenteriiMapState extends State<RenteriiMap> {
                     BlocBuilder<ShopCubit, ShopState>(
                       builder: (context, state) {
                         if (state is ShopLoaded) {
-                            return BottomBar(
-                              text: 'Shops around you',
-                              color: kCardBackgroundColor,
-                              textColor: Colors.black,
-                              onTap: () {
-                                print("HEELLOOO");
-                                // context.router.pop();
-                                print(state.shops);
-                                List<Shop> aroundShops = state.shops
+                          return BottomBar(
+                            text: 'Shops around you',
+                            color: kCardBackgroundColor,
+                            textColor: Colors.black,
+                            onTap: () {
+                              print("HEELLOOO");
+                              // context.router.pop();
+                              print(state.shops);
+                              List<Shop> aroundShops = state.shops
                                   .where((shop) =>
                                       getDistance(shop.lat, shop.lng) <=
                                       distanceBetween)
                                   .toList();
-                                print(aroundShops);
-                                context.router.push(
+                              print(aroundShops);
+                              context.router.push(
                                 ShopsArroundPopularScreenRoute(
-                                    pageTitle: 'Shops Around You',
-                                    isBooking: true,
-                                    shops: aroundShops,
-                                  ),
-                                );
-                              },
-                            );
+                                  pageTitle: 'Shops Around You',
+                                  isBooking: true,
+                                  shops: aroundShops,
+                                ),
+                              );
+                            },
+                          );
                         }
                         return Container();
                       },
@@ -278,11 +363,5 @@ class _RenteriiMapState extends State<RenteriiMap> {
         slideCurve: Curves.linearToEaseOut,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    mapController?.dispose();
-    super.dispose();
   }
 }

@@ -41,16 +41,18 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   dynamic user;
   double getDistance(double lat2, double lon2) {
-    if(user != null && user.latitude != null && user.longitude != null) {
-      return Geolocator.distanceBetween(user.latitude!, user.longitude!, lat2, lon2) / 1000;
-    }else {
+    if (user != null && user.latitude != null && user.longitude != null) {
+      return Geolocator.distanceBetween(
+              user.latitude!, user.longitude!, lat2, lon2) /
+          1000;
+    } else {
       return Geolocator.distanceBetween(32, 5, lat2, lon2) / 1000;
     }
   }
 
   List<Shop> shops = <Shop>[];
   List<Shop> aroundShops = <Shop>[];
-  double distanceBetween = 200.0;
+  double distanceBetween = 300.0;
   @override
   void initState() {
     // BlocProvider.of<ShopCubit>(context).getAllShops();
@@ -84,7 +86,7 @@ class _HomeState extends State<Home> {
                   child: InkWell(
                     onTap: () {
                       context.router.push(
-                        const LocationScreenRoute(),
+                        LocationScreenRoute(),
                       );
                     },
                     child: Text(

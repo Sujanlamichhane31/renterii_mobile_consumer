@@ -29,16 +29,16 @@ class AppConfig {
   // };
   static final Map<String, AppLanguage> languagesSupported = {
     "en": AppLanguage("English", english()),
-    // "ar": AppLanguage("عربى", arabic()),
-    // "pt": AppLanguage("Portugal", portuguese()),
+    "ar": AppLanguage("عربى", arabic()),
+    "pt": AppLanguage("Portugal", portuguese()),
     "fr": AppLanguage("Français", french()),
-    // "id": AppLanguage("Bahasa Indonesia", indonesian()),
+    "id": AppLanguage("Bahasa Indonesia", indonesian()),
     "es": AppLanguage("Español", spanish()),
-    // "it": AppLanguage("italiano", italian()),
-    // "tr": AppLanguage("Türk", turkish()),
-    // "sw": AppLanguage("Kiswahili", swahili()),
+    "it": AppLanguage("italiano", italian()),
+    "tr": AppLanguage("Türk", turkish()),
+    "sw": AppLanguage("Kiswahili", swahili()),
     "de": AppLanguage("Deutsch", german()),
-    // "ro": AppLanguage("Română", romanian()),
+    "ro": AppLanguage("Română", romanian()),
   };
 }
 

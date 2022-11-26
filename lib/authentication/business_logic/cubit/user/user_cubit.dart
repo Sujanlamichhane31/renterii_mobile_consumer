@@ -230,6 +230,8 @@ class UserCubit extends HydratedCubit<UserState> {
     String? addressType,
     double? latitude,
     double? longitude,
+    String? description,
+    String? category,
   }) async {
     final user = state.user;
 

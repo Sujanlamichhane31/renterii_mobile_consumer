@@ -5,12 +5,15 @@ import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/authentication/presentation/widgets/image_upload.dart';
+import 'package:renterii/authentication/presentation/widgets/profile_image.dart';
+import 'package:renterii/profile/presentation/screens/profile_edit_screen.dart';
 import 'package:renterii/profile/presentation/screens/settings_screen.dart';
 import 'package:renterii/profile/presentation/screens/support_screen.dart';
 import 'package:renterii/profile/presentation/screens/terms_conditions_screen.dart';
 import 'package:renterii/profile/presentation/screens/wallet_screen.dart';
 import 'package:renterii/profile/presentation/widgets/list_tile.dart';
 import 'package:renterii/routes/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_router.gr.dart';
 import '../../../theme_cubit.dart';
@@ -52,6 +55,10 @@ class _AccountState extends State<Account> {
     super.initState();
   }
 
+  void _launchURL(String url) async {
+    if (!await launch(url)) throw 'Could not launch $url';
+  }
+
   @override
   Widget build(BuildContext context) {
     late ThemeCubit _themeCubit;
@@ -82,17 +89,14 @@ class _AccountState extends State<Account> {
           small: true,
           image: 'images/account/ic_menu_setting.png',
           text: 'Edit profile',
-          onTap: () => context.router.push(EditProfileScreenRoute()),
+          onTap: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => ProfileEditPage())),
         ),
         BuildListTile(
             small: true,
             image: 'images/account/ic_menu_tncact.png',
             text: AppLocalizations.of(context)!.tnc,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => TermsAndConditionsScreen()))),
-
+            onTap: () => _launchURL('https://www.renterii.com/terms')),
         BuildListTile(
           small: true,
           image: 'images/account/ic_menu_supportact.png',
@@ -212,10 +216,15 @@ class UserDetails extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // ProfileImage(
+              //   size: 36.0,
+              //   imageUrl: state.user.photoUrl,
+              //   isUpdating: false,
+              // ),
               ImageUpload(
-                size: 36.0,
                 imageUrl: state.user.photoUrl,
                 isUpdating: false,
+                size: 36.0,
               ),
               const SizedBox(width: 8.0),
               Column(
@@ -244,8 +253,8 @@ class UserDetails extends StatelessWidget {
                   Text(
                     state.user.email ?? '',
                     style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: const Color(0xff9a9a9a),
-                        ),
+                        color: const Color(0xff9a9a9a),
+                        overflow: TextOverflow.ellipsis),
                   ),
                 ],
               ),
