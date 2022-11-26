@@ -13,7 +13,6 @@ import 'package:renterii/authentication/data/data_providers/auth_data_provider.d
 import 'package:renterii/authentication/data/data_providers/wallet_data_provider.dart';
 import 'package:renterii/authentication/data/repositories/auth_repository.dart';
 import 'package:renterii/authentication/data/repositories/wallet_repository.dart';
-import 'package:renterii/authentication/presentation/screens/register_screen.dart';
 import 'package:renterii/home/business_logic/cubit/category_cubit.dart';
 import 'package:renterii/home/data/data_provider/home_data_provider.dart';
 import 'package:renterii/home/data/repositories/home_repository.dart';
@@ -21,10 +20,6 @@ import 'package:renterii/language_cubit.dart';
 import 'package:renterii/orders/business_logic/cubit/order_cubit.dart';
 import 'package:renterii/orders/data/data_providers/order_data_provider.dart';
 import 'package:renterii/orders/data/repositories/order_repository.dart';
-import 'package:renterii/profile/presentation/screens/profile_edit_screen.dart';
-import 'package:renterii/profile/presentation/screens/profile_screen.dart';
-import 'package:renterii/profile/presentation/screens/support_screen.dart';
-import 'package:renterii/rentals/presentation/screens/shops_map_screen.dart';
 import 'package:renterii/shops/business_logic/cubit/cubit/deals_cubit.dart';
 import 'package:renterii/shops/business_logic/cubit/product/product_cubit.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';

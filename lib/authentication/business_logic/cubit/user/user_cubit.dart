@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +39,7 @@ class UserCubit extends HydratedCubit<UserState> {
     Future<void> verificationCompleted(
         PhoneAuthCredential verificationCompleted) async {
       // await EasyLoading.dismiss();
-      print('VERIFICATION COMPLETED');
+      log('VERIFICATION COMPLETED');
 
       emit(
         state.copyWith(
@@ -53,7 +54,7 @@ class UserCubit extends HydratedCubit<UserState> {
         smsCode: verificationCompleted.smsCode!,
       );
 
-      print('AUTH CREDENTIAL $authCredentials');
+      log('AUTH CREDENTIAL $authCredentials');
 
       final UserCredential userCredentials =
           await FirebaseAuth.instance.signInWithCredential(authCredentials);
@@ -77,15 +78,15 @@ class UserCubit extends HydratedCubit<UserState> {
       //
       // await _fetchUserProfile();
 
-      print('USER CREDENTIAL $userCredentials');
+      log('USER CREDENTIAL $userCredentials');
     }
 
     Future<void> verificationFailed(
         FirebaseAuthException verificationFailed) async {
       // await EasyLoading.dismiss();
 
-      print('VERIFICATION FAILED');
-      print(verificationFailed.message);
+      log('VERIFICATION FAILED');
+      log("${verificationFailed.message}");
       emit(
         state.copyWith(
           status: UserStatus.loginFailure,
@@ -122,8 +123,8 @@ class UserCubit extends HydratedCubit<UserState> {
         codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
       );
     } catch (error, stackTrace) {
-      print('LOGIN WITH PHONE NUMBER ERROR $error');
-      print(stackTrace);
+      log('LOGIN WITH PHONE NUMBER ERROR $error');
+      log("$stackTrace");
 
       emit(
         state.copyWith(
@@ -170,8 +171,8 @@ class UserCubit extends HydratedCubit<UserState> {
         _fetchUserProfile();
       }
     } catch (error, stackTrace) {
-      print('VERIFY OTP ERROR $error');
-      print(stackTrace);
+      log('VERIFY OTP ERROR $error');
+      log("$stackTrace");
 
       emit(
         state.copyWith(
@@ -209,8 +210,8 @@ class UserCubit extends HydratedCubit<UserState> {
         _fetchUserProfile();
       }
     } catch (error, s) {
-      print(error);
-      print(s);
+      log("$error");
+      log("$s");
       emit(
         state.copyWith(
           status: UserStatus.loginFailure,
@@ -259,8 +260,8 @@ class UserCubit extends HydratedCubit<UserState> {
     final userProfileData = data['docData'];
     final List<UserTransaction> transactions = [];
 
-    print('DATA_TRANSACTION ${userProfileData['transaction']}');
-    print('DATA_WALLET_BALANCE ${userProfileData['walletBalance']}');
+    log('DATA_TRANSACTION ${userProfileData['transaction']}');
+    log('DATA_WALLET_BALANCE ${userProfileData['walletBalance']}');
 
     if (userProfileData['transaction'] != null) {
       for (dynamic transaction in userProfileData['transaction']) {
@@ -420,19 +421,19 @@ class UserCubit extends HydratedCubit<UserState> {
         ),
       );
     } catch (e) {
-      print(e);
+      log("$e");
     }
   }
 
   @override
   void onChange(Change<UserState> change) {
     super.onChange(change);
-    print(change);
+    log("$change");
   }
 
   @override
   UserState? fromJson(Map<String, dynamic> json) {
-    print('FROM JSON AAAAAAAAAAAAAA ${UserState.fromMap(json)}');
+    log('FROM JSON AAAAAAAAAAAAAA ${UserState.fromMap(json)}');
     return UserState.fromMap(json);
   }
 
@@ -441,7 +442,7 @@ class UserCubit extends HydratedCubit<UserState> {
     if (state.user.id == '') {
       return null;
     }
-    print('TO JSON ${state.toMap()}');
+    log('TO JSON ${state.toMap()}');
     return state.toMap();
   }
 }

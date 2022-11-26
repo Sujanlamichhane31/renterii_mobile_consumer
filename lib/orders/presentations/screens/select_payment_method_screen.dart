@@ -7,15 +7,17 @@ import 'package:renterii/routes/routes.dart';
 import '../widgets/build-list.widget.dart';
 
 class SelectPaymentMethodScreen extends StatelessWidget {
+  const SelectPaymentMethodScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return FadedSlideAnimation(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
+          preferredSize: const Size.fromHeight(70.0),
           child: AppBar(
             flexibleSpace: Container(
-              padding: EdgeInsets.only(left: 60),
+              padding: const EdgeInsets.only(left: 60),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +26,7 @@ class SelectPaymentMethodScreen extends StatelessWidget {
                     AppLocalizations.of(context)!.selectPayment!,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8.0,
                   ),
                   Text(
@@ -39,7 +41,7 @@ class SelectPaymentMethodScreen extends StatelessWidget {
             ),
             titleSpacing: 0,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.chevron_left,
                 size: 30,
               ),
@@ -86,13 +88,13 @@ class SelectPaymentMethodScreen extends StatelessWidget {
                 onTap: () =>
                     Navigator.pushNamed(context, PageRoutes.orderPlaced),
                 contentPadding:
-                EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+                const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
                 leading: FadedScaleAnimation(
                   child: Image.asset(
                     'images/payment/payment_cod.png',
                     height: 37,
                   ),
-                  fadeDuration: Duration(milliseconds: 800),
+                  fadeDuration: const Duration(milliseconds: 800),
                 ),
                 title: Text(
                   AppLocalizations.of(context)!.wallet!,
@@ -108,7 +110,7 @@ class SelectPaymentMethodScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 color: Theme.of(context).cardColor,
                 child: Text(AppLocalizations.of(context)!.card!.toUpperCase(),
                     style: Theme.of(context).textTheme.caption!.copyWith(
@@ -129,7 +131,7 @@ class SelectPaymentMethodScreen extends StatelessWidget {
                 text: AppLocalizations.of(context)!.debit,
               ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 color: Theme.of(context).cardColor,
                 child: Text(
                   AppLocalizations.of(context)!.cash!.toUpperCase(),
@@ -182,8 +184,8 @@ class SelectPaymentMethodScreen extends StatelessWidget {
           ),
         ),
       ),
-      beginOffset: Offset(0.0, 0.3),
-      endOffset: Offset(0, 0),
+      beginOffset: const Offset(0.0, 0.3),
+      endOffset: const Offset(0, 0),
       slideCurve: Curves.linearToEaseOut,
     );
   }

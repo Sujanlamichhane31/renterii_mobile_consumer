@@ -1,6 +1,5 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -15,7 +14,7 @@ List<String> stops = [
   'Seveehill Dr',
 ];
 
-final CameraPosition kGooglePlex = CameraPosition(
+const CameraPosition kGooglePlex = CameraPosition(
   target: LatLng(43.651070, -75.6972),
   zoom: 18,
 );
@@ -33,8 +32,8 @@ class MapUtils {
 
   static Future<BitmapDescriptor> createBitmapDescriptorFromImage(
       String imagee, String alphabet) async {
-    ui.PictureRecorder recorder = new ui.PictureRecorder();
-    Canvas c = new Canvas(recorder);
+    ui.PictureRecorder recorder = ui.PictureRecorder();
+    Canvas c = Canvas(recorder);
 
     double imageWidth = 70;
     double imageHeight = 70;
@@ -48,9 +47,9 @@ class MapUtils {
         image: myImage,
         rect: Rect.fromLTWH(0, 0, imageWidth, imageHeight * 1.1));
 
-    TextPainter textPainter = new TextPainter(
+    TextPainter textPainter = TextPainter(
         text: TextSpan(
-            style: new TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 40.0,
               fontWeight: FontWeight.w600,
@@ -61,7 +60,7 @@ class MapUtils {
 
     textPainter.layout();
 
-    textPainter.paint(c, Offset(20, 6));
+    textPainter.paint(c, const Offset(20, 6));
 
     final picture = recorder.endRecording();
     final image = await picture.toImage(110, 110);

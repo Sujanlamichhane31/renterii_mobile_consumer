@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +9,8 @@ import 'package:renterii/authentication/business_logic/cubit/signup/signup_cubit
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/authentication/presentation/screens/location_screen.dart';
 import 'package:renterii/authentication/presentation/widgets/register_text_field.dart';
-import 'package:renterii/rentals/presentation/screens/shops_map_screen.dart';
-import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/utils/constant.dart';
 import 'package:renterii/utils/extension.dart';
-
 import '../widgets/bottom_bar.dart';
 import '../widgets/image_upload.dart';
 import '../widgets/text_field.dart';
@@ -117,7 +112,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         final user = state.user;
-        _nameController.text = user.name ?? '';
+        _nameController.text = user.name;
         _emailController.text = user.email ?? '';
         _phoneNumberController.text = user.phoneNumber ?? '';
 

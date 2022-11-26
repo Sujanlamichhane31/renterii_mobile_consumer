@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class WalletDataProvider {
 
       return jsonDecode(response.body) as Map<String, dynamic>;
     } catch (err) {
-      print('err charging user: ${err.toString()}');
+      log('err charging user: ${err.toString()}');
       rethrow;
     }
   }

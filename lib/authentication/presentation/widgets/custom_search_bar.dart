@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:renterii/Themes/colors.dart';
-
-import '../../../Themes/colors.dart';
 
 class CustomSearchBar extends StatelessWidget {
   final String? hint;

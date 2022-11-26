@@ -51,11 +51,11 @@ class _SetLocationState extends State<SetLocation> {
     return Scaffold(
 //          extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(126.0),
+        preferredSize: const Size.fromHeight(126.0),
         child: CustomAppBar(
           // titleSpacing: 0,
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.chevron_left,
               size: 30,
             ),
@@ -65,7 +65,7 @@ class _SetLocationState extends State<SetLocation> {
           ),
           titleWidget: Text(
             AppLocalizations.of(context)!.setLocation!,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           onTap: null,
           hint: AppLocalizations.of(context)!.enterLocation,
@@ -75,12 +75,12 @@ class _SetLocationState extends State<SetLocation> {
         child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height -
-                Size.fromHeight(126).height -
+                const Size.fromHeight(126).height -
                 MediaQuery.of(context).padding.top,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 8.0,
                 ),
                 Expanded(
@@ -104,13 +104,13 @@ class _SetLocationState extends State<SetLocation> {
                       Align(
                           alignment: Alignment.center,
                           child: Padding(
-                            padding: EdgeInsets.only(bottom: 36.0),
+                            padding: const EdgeInsets.only(bottom: 36.0),
                             child: FadedScaleAnimation(
                               child: Image.asset(
                                 'images/map_pin.png',
                                 height: 36,
                               ),
-                              fadeDuration: Duration(milliseconds: 800),
+                              fadeDuration: const Duration(milliseconds: 800),
                             ),
                           )),
                       Align(
@@ -118,14 +118,14 @@ class _SetLocationState extends State<SetLocation> {
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: FadedScaleAnimation(
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               backgroundColor: Colors.white,
                               child: Icon(
                                 Icons.my_location,
                                 color: Colors.black,
                               ),
                             ),
-                            fadeDuration: Duration(milliseconds: 800),
+                            fadeDuration: const Duration(milliseconds: 800),
                           ),
                         ),
                       )
@@ -135,7 +135,7 @@ class _SetLocationState extends State<SetLocation> {
                 Container(
                   color: Theme.of(context).cardColor,
                   padding:
-                  EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   child: Row(
                     children: <Widget>[
                       FadedScaleAnimation(
@@ -143,9 +143,9 @@ class _SetLocationState extends State<SetLocation> {
                           'images/map_pin.png',
                           scale: 2.5,
                         ),
-                        fadeDuration: Duration(milliseconds: 800),
+                        fadeDuration: const Duration(milliseconds: 800),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16.0,
                       ),
                       Expanded(
@@ -175,8 +175,8 @@ class _SetLocationState extends State<SetLocation> {
             ),
           ),
         ),
-        beginOffset: Offset(0.0, 0.3),
-        endOffset: Offset(0, 0),
+        beginOffset: const Offset(0.0, 0.3),
+        endOffset: const Offset(0, 0),
         slideCurve: Curves.linearToEaseOut,
       ),
     );
@@ -204,21 +204,21 @@ class _SaveAddressCardState extends State<SaveAddressCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: EntryField(
                 controller: _addressController,
                 label: AppLocalizations.of(context)!.addressLabel,
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: Text(
                 AppLocalizations.of(context)!.saveAddress!.toUpperCase(),
                 style: Theme.of(context).textTheme.subtitle2,
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 16.0),
+              padding: const EdgeInsets.only(bottom: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -257,8 +257,8 @@ class _SaveAddressCardState extends State<SaveAddressCard> {
             )
           ],
         ),
-        beginOffset: Offset(0.0, 0.3),
-        endOffset: Offset(0, 0),
+        beginOffset: const Offset(0.0, 0.3),
+        endOffset: const Offset(0, 0),
         slideCurve: Curves.linearToEaseOut,
       ),
     );

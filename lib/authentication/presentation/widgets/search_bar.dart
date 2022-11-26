@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
@@ -22,8 +21,8 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0),
-      padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 24.0),
+      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 24.0),
       decoration: BoxDecoration(
         boxShadow: [
           boxShadow ?? BoxShadow(color: kCardBackgroundColor),
@@ -36,7 +35,7 @@ class SearchBar extends StatelessWidget {
         textCapitalization: TextCapitalization.sentences,
         cursorColor: kMainColor,
         decoration: InputDecoration(
-          icon: ImageIcon(
+          icon: const ImageIcon(
             AssetImage('images/icons/ic_search.png'),
             color: Colors.black,
             size: 16,

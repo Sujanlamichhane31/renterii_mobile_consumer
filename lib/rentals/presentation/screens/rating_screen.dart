@@ -1,22 +1,12 @@
 import 'package:animation_wrappers/animation_wrappers.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 //import 'package:renrerii/Components/bottom_bar.dart';
 //import 'package:renterii/Components/textfield.dart';
 
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
-import 'package:renterii/rentals/business_logic/cubit/shops/shops_cubit.dart';
-import 'package:renterii/rentals/presentation/widgets/booking_row.dart';
-import 'package:renterii/rentals/presentation/widgets/bottom_bar.dart';
-import 'package:renterii/rentals/presentation/widgets/entry_field.dart';
-import 'package:renterii/routes/app_router.gr.dart';
-import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
-import 'package:renterii/shops/data/models/shop.dart';
 
-import '../../../authentication/business_logic/cubit/user/user_cubit.dart';
 
 class RatingScreen extends StatefulWidget {
   final dynamic shop;
@@ -46,13 +36,13 @@ class _RatingScreenState extends State<RatingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
+        preferredSize: const Size.fromHeight(100.0),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: AppBar(
             titleSpacing: 0,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.chevron_left,
                 size: 30,
               ),
@@ -111,7 +101,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       .headline4!
                       .copyWith(fontWeight: FontWeight.bold, fontSize: 15.0),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8.0,
                 ),
                 Text(
@@ -120,7 +110,7 @@ class _RatingScreenState extends State<RatingScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .caption!
-                      .copyWith(fontSize: 10.0, color: Color(0xff888888)),
+                      .copyWith(fontSize: 10.0, color: const Color(0xff888888)),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 44.0),
@@ -129,7 +119,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       minRating: 1,
                       itemCount: 5,
                       glowColor: kTransparentColor,
-                      unratedColor: Color(0xffe6e6e6),
+                      unratedColor: const Color(0xffe6e6e6),
                       onRatingUpdate: (value) {
                         rating = value;
                       },
@@ -149,7 +139,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       style: Theme.of(context).textTheme.caption!.copyWith(
                           fontWeight: FontWeight.w400,
                           fontSize: 11.0,
-                          color: Color(0xff838383),
+                          color: const Color(0xff838383),
                           letterSpacing: 0.5),
                     ),
                   ),
@@ -176,7 +166,7 @@ class _RatingScreenState extends State<RatingScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 80,
                 ),
               ],

@@ -4,7 +4,7 @@ import 'package:renterii/Config/app_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageCubit extends Cubit<Locale> {
-  LanguageCubit() : super(Locale('en'));
+  LanguageCubit() : super(const Locale('en'));
 
   void localeSelected(String value) {
     emit(Locale(value));

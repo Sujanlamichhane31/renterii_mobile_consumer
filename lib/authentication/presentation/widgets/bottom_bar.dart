@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/Themes/style.dart';
 
-import '../../../Themes/colors.dart';
-import '../../../Themes/style.dart';
 
 class BottomBar extends StatelessWidget {
   final Function() onTap;

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -118,7 +119,7 @@ class SignupCubit extends Cubit<SignupState> {
 
       emit(ImageUploadSuccess());
     } catch (e) {
-      print(e);
+      log("$e");
       emit(ImageUploadFailure());
     }
   }
@@ -126,6 +127,6 @@ class SignupCubit extends Cubit<SignupState> {
   @override
   void onChange(Change<SignupState> change) {
     super.onChange(change);
-    print(change);
+    log("$change");
   }
 }

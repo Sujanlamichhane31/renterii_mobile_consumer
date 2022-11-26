@@ -42,7 +42,7 @@ class ThankYouScreen extends StatelessWidget {
                   .subtitle2!
                   .copyWith(color: kDisabledColor, fontSize: 18),
             ),
-            Spacer(
+        const    Spacer(
                 // flex: 2,
                 ),
             BottomBar(

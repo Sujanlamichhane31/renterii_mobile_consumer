@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class Helper {
@@ -5,7 +7,7 @@ class Helper {
     try {
       await launch(url);
     } catch (e) {
-      print("launchURL: $e");
+      log("launchURL: $e");
     }
   }
 }

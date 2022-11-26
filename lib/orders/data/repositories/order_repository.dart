@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:renterii/orders/data/models/order.dart';
 
@@ -14,7 +16,7 @@ class OrderRepository {
     try {
       final QuerySnapshot documentsSnapshot =
           await _orderDataProvider.getOrders(userId);
-      print(documentsSnapshot.docs);
+      log("${documentsSnapshot.docs}");
       final List<Order> orders = [];
 
       for (QueryDocumentSnapshot docSnapshot in documentsSnapshot.docs) {
@@ -29,11 +31,11 @@ class OrderRepository {
             total: docData['total'],
             shopId: (await docData['shop'].get()).id,
             shopReference: (await docData['shop'].get()).reference));
-        print('shop: ${docData['shop']}');
+        log('shop: ${docData['shop']}');
       }
       for (Order order in orders) {
         order.shop = (await order.shop.get()).data();
-        print(order.shop);
+        log(order.shop);
         for (dynamic product in order.products) {
           product['product'] =
               (await Map<String, dynamic>.from(product)['product'].get())

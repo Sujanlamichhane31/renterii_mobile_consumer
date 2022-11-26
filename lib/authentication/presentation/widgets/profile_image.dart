@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:renterii/authentication/business_logic/cubit/signup/signup_cubit.dart';
 
 import '../../../Themes/colors.dart';
@@ -36,7 +35,7 @@ class _ProfileImageState extends State<ProfileImage> {
         backgroundImage = NetworkImage(widget.imageUrl!);
       } else {
         backgroundImage = Image.asset("images/account/profile_icon.png");
-        ;
+        
       }
 
       if (image != null) {

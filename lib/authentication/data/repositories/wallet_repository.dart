@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:renterii/authentication/data/data_providers/wallet_data_provider.dart';
 import 'package:renterii/authentication/data/models/user.dart';
@@ -23,7 +25,7 @@ class WalletRepository {
       final _paymentIntentData = await _walletDataProvider.createPaymentIntent(
           amount: _calculateAmount(amount));
 
-      print(_paymentIntentData);
+      log("$_paymentIntentData");
 
       if (_paymentIntentData['client_secret'] != null) {
         await Stripe.instance.initPaymentSheet(
@@ -46,7 +48,7 @@ class WalletRepository {
         throw 'An error occurred. Try again later!';
       }
     } catch (e, s) {
-      print('exception:$e$s');
+      log('exception:$e$s');
 
       String messageText = '';
       if (e is StripeException) {

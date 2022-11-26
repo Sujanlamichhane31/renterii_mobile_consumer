@@ -5,17 +5,14 @@ import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/authentication/presentation/widgets/image_upload.dart';
-import 'package:renterii/authentication/presentation/widgets/profile_image.dart';
 import 'package:renterii/profile/presentation/screens/profile_edit_screen.dart';
 import 'package:renterii/profile/presentation/screens/settings_screen.dart';
 import 'package:renterii/profile/presentation/screens/support_screen.dart';
-import 'package:renterii/profile/presentation/screens/terms_conditions_screen.dart';
 import 'package:renterii/profile/presentation/screens/wallet_screen.dart';
 import 'package:renterii/profile/presentation/widgets/list_tile.dart';
 import 'package:renterii/routes/routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../routes/app_router.gr.dart';
 import '../../../theme_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -75,7 +72,7 @@ class _AccountState extends State<Account> {
           image: 'images/account/ic_menu_wallet.png',
           text: AppLocalizations.of(context)!.wallet,
           onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => WalletScreen())),
+              context, MaterialPageRoute(builder: (context) => const WalletScreen())),
         ),
         // AddressTile(),
         // BuildListTile(
@@ -90,7 +87,7 @@ class _AccountState extends State<Account> {
           image: 'images/account/ic_menu_setting.png',
           text: 'Edit profile',
           onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => ProfileEditPage())),
+              .push(MaterialPageRoute(builder: (_) => const ProfileEditPage())),
         ),
         BuildListTile(
             small: true,

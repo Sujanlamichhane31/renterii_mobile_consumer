@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,7 +51,7 @@ class AuthDataProvider {
       final UserCredential userCredentials =
           await FirebaseAuth.instance.signInWithCredential(authCredentials);
 
-      print('USER CREDENTIAL $userCredentials');
+      log('USER CREDENTIAL $userCredentials');
 
       if (userCredentials.user == null) {
         throw '!USER';
@@ -65,7 +66,7 @@ class AuthDataProvider {
         );
       }
 
-      return userCredentials!;
+      return userCredentials;
     } catch (error) {
       rethrow;
     }
@@ -84,12 +85,12 @@ class AuthDataProvider {
     try {
       GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
 
-      print(googleAuthProvider.scopes);
+      log("${googleAuthProvider.scopes}");
 
       final userCredential = await FirebaseAuth.instance
           .signInWithAuthProvider(googleAuthProvider);
 
-      print(userCredential);
+      log("$userCredential");
 
       final user = userCredential.user;
 
@@ -104,7 +105,7 @@ class AuthDataProvider {
 
       // final bool isNewUser = await _isNewUser(userId: userId);
 
-      print('IS_NEW_USER: $isNewUser');
+      log('IS_NEW_USER: $isNewUser');
 
       if (isNewUser) {
         await _startUserProfile(
@@ -164,7 +165,7 @@ class AuthDataProvider {
         'longitude': 0.0,
       });
     } else {
-      print('USER EXISTS');
+      log('USER EXISTS');
     }
   }
 
@@ -217,15 +218,15 @@ class AuthDataProvider {
       //       user.updatePhoneNumber(verificationCompleted);
       //     },
       //     verificationFailed: (FirebaseAuthException verificationFailed) {
-      //       print('Verification failed');
-      //       print(verificationFailed);
+      //       log('Verification failed');
+      //       log(verificationFailed);
       //     },
       //     codeSent: (
       //         String verificationId,
       //         int? forceResendingToken,
       //         ) {
       //       phoneNumberVerificationId = verificationId;
-      //       print(phoneNumberVerificationId);
+      //       log(phoneNumberVerificationId);
       //     },
       //     codeAutoRetrievalTimeout: (codeAutoRetrievalTimeout) {},
       //   );

@@ -292,7 +292,7 @@ class _RenteriiMapState extends State<RenteriiMap> {
                               .toList();
                           return Column(
                             children: [
-                              aroundShops.length != 0
+                              aroundShops.isNotEmpty
                                   ? const Text(
                                       "Shops around 300 KM from you",
                                       style: TextStyle(fontSize: 8.0),
@@ -301,12 +301,12 @@ class _RenteriiMapState extends State<RenteriiMap> {
                                       "No Shops around 300 KM from you",
                                       style: TextStyle(fontSize: 8.0),
                                     ),
-                              aroundShops.length != 0
+                              aroundShops.isNotEmpty
                                   ? const SizedBox(
                                       height: 5.0,
                                     )
                                   : const SizedBox(),
-                              aroundShops.length != 0
+                              aroundShops.isNotEmpty
                                   ? SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -333,7 +333,7 @@ class _RenteriiMapState extends State<RenteriiMap> {
                               .toList();
                           return Column(
                             children: [
-                              aroundShops.length != 0
+                              aroundShops.isNotEmpty
                                   ? const Text(
                                       "Shops around 300 KM from you",
                                       style: TextStyle(fontSize: 8.0),
@@ -342,12 +342,12 @@ class _RenteriiMapState extends State<RenteriiMap> {
                                       "No Shops around 300 KM from you",
                                       style: TextStyle(fontSize: 8.0),
                                     ),
-                              aroundShops.length != 0
+                              aroundShops.isNotEmpty
                                   ? const SizedBox(
                                       height: 5.0,
                                     )
                                   : const SizedBox(),
-                              aroundShops.length != 0
+                              aroundShops.isNotEmpty
                                   ? SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *

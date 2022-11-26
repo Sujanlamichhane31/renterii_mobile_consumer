@@ -71,7 +71,6 @@ class AnimatedBottomBarState extends State<AnimatedBottomBar>
               AnimatedSize(
                 duration: duration,
                 curve: Curves.easeInOut,
-                vsync: this,
                 child: Text(
                   isSelected ? item.text! : "",
                   style: Theme.of(context)

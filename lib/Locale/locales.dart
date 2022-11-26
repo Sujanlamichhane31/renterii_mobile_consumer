@@ -13,15 +13,8 @@ class AppLocalizations {
   }
 
   String getLocalizationFor(String key) {
-    return (AppConfig.languagesSupported[locale.languageCode]!.values[key] !=
-            null
-        ? AppConfig.languagesSupported[locale.languageCode]!.values[key]
-        : AppConfig.languagesSupported[AppConfig.languageDefault]!
-                    .values[key] !=
-                null
-            ? AppConfig
-                .languagesSupported[AppConfig.languageDefault]!.values[key]
-            : key)!;
+    return (AppConfig.languagesSupported[locale.languageCode]!.values[key] ?? (AppConfig
+                .languagesSupported[AppConfig.languageDefault]!.values[key] ?? key));
   }
 
   String? get vegetableText {

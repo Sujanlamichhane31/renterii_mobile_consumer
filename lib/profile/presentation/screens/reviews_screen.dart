@@ -56,13 +56,13 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
+        preferredSize: const Size.fromHeight(100.0),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: AppBar(
             titleSpacing: 0,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.chevron_left,
                 size: 30,
               ),
@@ -76,28 +76,28 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 Text(widget.shopName!,
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                         color: Theme.of(context).secondaryHeaderColor)),
-                SizedBox(
+                const SizedBox(
                   height: 10.0,
                 ),
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.star,
                       color: Color(0xff7ac81e),
                       size: 13,
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Text('${widget.ratingNumber}',
                         style: Theme.of(context)
                             .textTheme
                             .overline!
-                            .copyWith(color: Color(0xff7ac81e))),
-                    SizedBox(width: 8.0),
+                            .copyWith(color: const Color(0xff7ac81e))),
+                    const SizedBox(width: 8.0),
                     Text('${widget.numberOfReviews} reviews',
                         style: Theme.of(context).textTheme.overline),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10.0,
                 ),
                 Container(
@@ -115,7 +115,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             itemCount: listOfReviews.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -127,28 +127,28 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                           .copyWith(fontSize: 15.0),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.star,
                             color: Color(0xff7ac81e),
                             size: 13,
                           ),
-                          SizedBox(width: 8.0),
+                          const SizedBox(width: 8.0),
                           Text(listOfReviews[index].rating.toString(),
                               style: Theme.of(context)
                                   .textTheme
                                   .caption!
-                                  .copyWith(color: Color(0xff7ac81e))),
-                          Spacer(),
+                                  .copyWith(color: const Color(0xff7ac81e))),
+                          const Spacer(),
                           Text(
                             listOfReviews[index].date,
                             style: Theme.of(context)
                                 .textTheme
                                 .caption!
                                 .copyWith(
-                                    fontSize: 11.7, color: Color(0xffd7d7d7)),
+                                    fontSize: 11.7, color: const Color(0xffd7d7d7)),
                           ),
                         ],
                       ),
@@ -159,14 +159,14 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .caption!
-                          .copyWith(color: Color(0xff6a6c74)),
+                          .copyWith(color: const Color(0xff6a6c74)),
                     )
                   ],
                 ),
               );
             }),
-        beginOffset: Offset(0.0, 0.3),
-        endOffset: Offset(0, 0),
+        beginOffset: const Offset(0.0, 0.3),
+        endOffset: const Offset(0, 0),
         slideCurve: Curves.linearToEaseOut,
       ),
     );

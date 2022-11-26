@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:renterii/orders/data/models/order.dart';
 
@@ -6,7 +8,7 @@ class OrderDataProvider {
     final userResp =
         await FirebaseFirestore.instance.collection("users").doc(userId).get();
     final userReference = userResp.reference;
-    print('USER REFERENCE $userReference');
+    log('USER REFERENCE $userReference');
     final response = await FirebaseFirestore.instance
         .collection("orders")
         .where('user', whereIn: [userReference]).get();
@@ -17,7 +19,7 @@ class OrderDataProvider {
   Future<void> newOrder(Order order, String userId) async {
     final userReference =
         FirebaseFirestore.instance.collection("users").doc(userId);
-    print("DATATATATATAT PRPRPRPRPROOOVIDER");
+    log("DATATATATATAT PRPRPRPRPROOOVIDER");
 
     List<Map<String, dynamic>> products = [];
 

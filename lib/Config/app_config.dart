@@ -11,8 +11,8 @@ import 'package:renterii/Locale/swahili.dart';
 import 'package:renterii/Locale/turkish.dart';
 
 class AppConfig {
-  static final String appName = "Hungerz";
-  static final bool isDemoMode = false;
+  static const String appName = "Hungerz";
+  static const bool isDemoMode = false;
   static const String languageDefault = "en";
   // static final Map<String, AppLanguage> languagesSupported = {
   //   "en": AppLanguage("English", english()),

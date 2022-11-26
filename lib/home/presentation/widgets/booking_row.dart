@@ -9,6 +9,8 @@ import '../../../routes/app_router.gr.dart';
 // import 'package:renterii/HomeOrderAccount/Home/UI/Stores/stores.dart';
 
 class BookingRow extends StatefulWidget {
+  const BookingRow({Key? key}) : super(key: key);
+
   @override
   _BookingRowState createState() => _BookingRowState();
 }
@@ -106,6 +108,8 @@ class Cat {
 }
 
 class BottomWidget extends StatefulWidget {
+  const BottomWidget({Key? key}) : super(key: key);
+
   @override
   _BottomWidgetState createState() => _BottomWidgetState();
 }
@@ -114,7 +118,7 @@ class _BottomWidgetState extends State<BottomWidget> {
   int forIndex = 0;
   int dateIndex = 0;
   int timeIndex = 0;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -144,10 +148,10 @@ class _BottomWidgetState extends State<BottomWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Row(
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Text(
                   AppLocalizations.of(context)!.tabletext!.toUpperCase(),
                   style: Theme.of(context).textTheme.caption!.copyWith(
@@ -157,10 +161,10 @@ class _BottomWidgetState extends State<BottomWidget> {
                 ),
               ],
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Row(
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Text(
                   AppLocalizations.of(context)!.booking!,
                   style: Theme.of(context)
@@ -170,13 +174,13 @@ class _BottomWidgetState extends State<BottomWidget> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 35.0,
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: cat.length,
                   itemBuilder: (context, index) {
@@ -187,7 +191,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                         });
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Container(
                             height: 33.3,
                             width: 83.3,
@@ -197,9 +201,9 @@ class _BottomWidgetState extends State<BottomWidget> {
                                       ? kMainColor
                                       : Colors.white),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               color: forIndex == index
-                                  ? Color(0xffFFEEC8)
+                                  ? const Color(0xffFFEEC8)
                                   : Colors.white,
                             ),
                             alignment: Alignment.center,
@@ -216,11 +220,11 @@ class _BottomWidgetState extends State<BottomWidget> {
                     );
                   }),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Row(children: [
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Text(
@@ -231,13 +235,13 @@ class _BottomWidgetState extends State<BottomWidget> {
                     .copyWith(fontSize: 14.0, fontWeight: FontWeight.bold),
               )
             ]),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 35.0,
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: cat.length,
                   itemBuilder: (context, index) {
@@ -248,7 +252,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                         });
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Container(
                             height: 33.3,
                             width: 83.3,
@@ -258,9 +262,9 @@ class _BottomWidgetState extends State<BottomWidget> {
                                       ? kMainColor
                                       : Colors.white),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               color: dateIndex == index
-                                  ? Color(0xffFFEEC8)
+                                  ? const Color(0xffFFEEC8)
                                   : Colors.white,
                             ),
                             alignment: Alignment.center,
@@ -277,12 +281,12 @@ class _BottomWidgetState extends State<BottomWidget> {
                     );
                   }),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Text(
@@ -294,13 +298,13 @@ class _BottomWidgetState extends State<BottomWidget> {
                 )
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 35.0,
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: cat.length,
                   itemBuilder: (context, index) {
@@ -311,7 +315,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                         });
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Container(
                             height: 33.3,
                             width: 83.3,
@@ -321,9 +325,9 @@ class _BottomWidgetState extends State<BottomWidget> {
                                       ? kMainColor
                                       : Colors.white),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               color: timeIndex == index
-                                  ? Color(0xffFFEEC8)
+                                  ? const Color(0xffFFEEC8)
                                   : Colors.white,
                             ),
                             alignment: Alignment.center,
@@ -340,9 +344,9 @@ class _BottomWidgetState extends State<BottomWidget> {
                     );
                   }),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Row(children: [
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Text(
@@ -353,7 +357,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                     .copyWith(fontSize: 14.0, fontWeight: FontWeight.bold),
               )
             ]),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 100,
               margin: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -369,7 +373,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                         border: InputBorder.none)),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // BottomBar(
             //   text: 'Book A Table',
             //   onTap: () => Navigator.pushNamed(context, PageRoutes.tablebooked),
@@ -377,8 +381,8 @@ class _BottomWidgetState extends State<BottomWidget> {
           ],
         ),
       ),
-      beginOffset: Offset(0.0, 0.3),
-      endOffset: Offset(0, 0),
+      beginOffset: const Offset(0.0, 0.3),
+      endOffset: const Offset(0, 0),
       slideCurve: Curves.linearToEaseOut,
     );
   }

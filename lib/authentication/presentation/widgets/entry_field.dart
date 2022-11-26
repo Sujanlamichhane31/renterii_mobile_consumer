@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:renterii/Themes/colors.dart';
 
-import '../../../Themes/colors.dart';
 
 class EntryField extends StatelessWidget {
   final TextEditingController? controller;

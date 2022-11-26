@@ -71,7 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           builder: (context, state) {
             final user = state.user;
 
-            _nameController.text = user.name ?? '';
+            _nameController.text = user.name;
             _emailController.text = user.email ?? '';
             _phoneNumberController.text = user.phoneNumber ?? '';
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +121,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                               itemCount: state.orderInProgress!.products.length,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                print(
+                                log(
                                     'PRODUCTS ${state.orderInProgress!.products}');
                                 return Column(
                                   children: [
@@ -184,7 +186,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                               // );
                             }
                             if (state is DealLoaded) {
-                              print('deal loaded: ${state.deal.percentage}');
+                              log('deal loaded: ${state.deal.percentage}');
                               if (state.deal.percentage != 0) {
                                 discountDecimalPercentage =
                                     (state.deal.percentage / 100);
@@ -193,7 +195,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                                       .toStringAsFixed(1),
                                 );
 
-                                print(
+                                log(
                                     'total amound: $discountDecimalPercentage');
                               } else {
                                 discountAmount = 0.0;
@@ -568,7 +570,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
     } else {
       rentDuration = '${orderProduct.product.rentDuration} hour';
     }
-    print('order product: $orderProduct');
+    log('order product: $orderProduct');
     return Column(
       children: <Widget>[
         ListTile(
@@ -682,6 +684,6 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
   }
 
   _onPressed() {
-    print('pressed:');
+    log('pressed:');
   }
 }

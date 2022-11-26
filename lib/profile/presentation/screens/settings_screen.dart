@@ -23,6 +23,8 @@ class LanguageList {
 }
 
 class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -65,7 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 .copyWith(fontWeight: FontWeight.bold)),
         titleSpacing: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left,
             size: 30,
           ),
@@ -79,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Container(
                   height: 57.7,
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   //color: kCardBackgroundColor,
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -96,7 +98,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 BlocBuilder<ThemeCubit, ThemeData>(builder: (_, theme) {
                   sliderValue = _themeCubit.isDark;
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 6.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
                     child: ListTile(
                       title: Text(
                         locale.darkMode!,
@@ -121,7 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 }),
                 Container(
                   height: 58.0,
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -138,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   builder: (context, currentLocale) {
                     selectedLocal ??= currentLocale.languageCode;
                     return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: AppConfig.languagesSupported.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) => RadioListTile(
@@ -159,11 +161,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     );
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
               ],
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -176,8 +178,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ],
         ),
-        beginOffset: Offset(0.0, 0.3),
-        endOffset: Offset(0, 0),
+        beginOffset: const Offset(0.0, 0.3),
+        endOffset: const Offset(0, 0),
         slideCurve: Curves.linearToEaseOut,
       ),
     );
