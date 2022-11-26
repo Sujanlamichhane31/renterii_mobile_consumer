@@ -39,9 +39,9 @@ class ShopBox extends StatelessWidget {
         }
         context.router.push(ShopScreenRoute(
           rating: totalRating != 0
-                  // ? (totalRating / shop.rating.length).toDouble() ?? 0
-                  ? (totalRating / shop.rating.length).toStringAsFixed(1) ?? '0'
-                  : '0',
+              // ? (totalRating / shop.rating.length).toDouble() ?? 0
+              ? (totalRating / shop.rating.length).toStringAsFixed(1) ?? '0'
+              : '0',
           ratingNumber: shop.rating.length,
           id: shop.id,
           name: shop.title,
@@ -75,7 +75,9 @@ class ShopBox extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
               Text(
-                AppLocalizations.of(context)!.type!,
+                // AppLocalizations.of(context)!.type!,
+                shop.categoryName,
+
                 style: Theme.of(context).textTheme.caption!.copyWith(
                       color: kLightTextColor,
                       fontSize: 10.0,
@@ -108,7 +110,7 @@ class ShopBox extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    'Parc Ali Bagh',
+                    shop.address,
                     //AppLocalizations.of(context)!.storeAddress!,
                     style: Theme.of(context).textTheme.caption!.copyWith(
                           color: kLightTextColor,

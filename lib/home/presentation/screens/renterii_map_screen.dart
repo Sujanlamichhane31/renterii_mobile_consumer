@@ -9,11 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
-import 'package:renterii/authentication/presentation/widgets/bottom_bar.dart';
 import 'package:renterii/home/presentation/widgets/categories_list_view.dart';
 import 'package:renterii/home/presentation/widgets/shop_box.dart';
 import 'package:renterii/map_utils.dart';
-import 'package:renterii/rentals/business_logic/cubit/shops/shops_cubit.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
 
@@ -54,7 +52,7 @@ class _RenteriiMapState extends State<RenteriiMap> {
   bool isCard = false;
   final Completer<GoogleMapController> _mapController = Completer();
   GoogleMapController? mapController;
-  double distanceBetween = 200.0;
+  double distanceBetween = 300.0;
   dynamic user;
 
   double getDistance(double lat2, double lon2) {
@@ -67,7 +65,16 @@ class _RenteriiMapState extends State<RenteriiMap> {
     }
   }
 
+  List<Shop> shopList = [];
+
   List<Marker> markerList = [];
+
+  shopAround(List<Shop> shops) {
+    shopList.clear();
+    shopList =
+        shops.where((shop) => getDistance(shop.lat, shop.lng) <= 300).toList();
+    addMarker(shopList);
+  }
 
   addMarker(List<Shop> result) {
     markerList.clear();
@@ -189,82 +196,35 @@ class _RenteriiMapState extends State<RenteriiMap> {
                     Expanded(
                       child: Stack(
                         children: <Widget>[
-                          // BlocBuilder<OrderMapBloc, OrderMapState>(
-                          //     builder: (context, state) {
-                          //   print('polyyyy' + state.polylines.toString());
-                          //   return
-                          // BlocBuilder<MapBloc, MapState>(
-                          //   buildWhen:
-                          //       (MapState prevState, MapState currState) =>
-                          //           currState is MapMarkersLoading ||
-                          //           currState is MapMarkersFetched,
-                          //   builder: (context, state) {
-                          //     if (state is MapMarkersFetched) {
-                          //       final marker = state.markers;
-                          //       return BlocBuilder<ShopCubit, ShopState>(
-                          //           builder: (context, state) {
-                          //         if (state is ShopLoaded) {
-                          //           addMarker(state.shops);
-
-                          //           return GoogleMap(
-                          //             // polylines: state.polylines,
-                          //             markers: Set<Marker>.of(markerList),
-                          //             mapType: MapType.normal,
-                          //             myLocationEnabled: true,
-                          //             myLocationButtonEnabled: true,
-                          //             onCameraMove: (cameraPosition) {},
-                          //             initialCameraPosition: kGooglePlex,
-                          //             // markers: _markers,
-                          //             onMapCreated: (GoogleMapController
-                          //                 controller) async {
-                          //               _mapController.complete(controller);
-                          //               // mapController = controller;
-                          //             },
-                          //           );
-                          //         }
-                          //         return Container();
-                          //       });
-                          //     } else {
-                          //       return const Center(
-                          //         child: CircularProgressIndicator(),
-                          //       );
-                          //     }
-                          //   },
-                          // ),
                           BlocBuilder<ShopCubit, ShopState>(
                               builder: (context, state) {
                             if (state is ShopLoaded) {
                               addMarker(state.shops);
                               return GoogleMap(
-                                // polylines: state.polylines,
                                 markers: Set<Marker>.of(markerList),
                                 mapType: MapType.normal,
                                 // myLocationEnabled: true,
                                 // myLocationButtonEnabled: true,
                                 onCameraMove: (cameraPosition) {},
                                 initialCameraPosition: kGooglePlex,
-                                // markers: _markers,
                                 onMapCreated:
                                     (GoogleMapController controller) async {
                                   _mapController.complete(controller);
-                                  // mapController = controller;
                                 },
                               );
                             } else if (state is ShopsByCategoryLoaded) {
                               addMarker(state.shops);
+
                               return GoogleMap(
-                                // polylines: state.polylines,
                                 markers: Set<Marker>.of(markerList),
                                 mapType: MapType.normal,
                                 myLocationEnabled: true,
                                 myLocationButtonEnabled: true,
                                 onCameraMove: (cameraPosition) {},
                                 initialCameraPosition: kGooglePlex,
-                                // markers: _markers,
                                 onMapCreated:
                                     (GoogleMapController controller) async {
                                   _mapController.complete(controller);
-                                  // mapController = controller;
                                 },
                               );
                             } else {
@@ -325,28 +285,86 @@ class _RenteriiMapState extends State<RenteriiMap> {
                     BlocBuilder<ShopCubit, ShopState>(
                       builder: (context, state) {
                         if (state is ShopLoaded) {
-                          return BottomBar(
-                            text: 'Shops around you',
-                            color: kCardBackgroundColor,
-                            textColor: Colors.black,
-                            onTap: () {
-                              print("HEELLOOO");
-                              // context.router.pop();
-                              print(state.shops);
-                              List<Shop> aroundShops = state.shops
-                                  .where((shop) =>
-                                      getDistance(shop.lat, shop.lng) <=
-                                      distanceBetween)
-                                  .toList();
-                              print(aroundShops);
-                              context.router.push(
-                                ShopsArroundPopularScreenRoute(
-                                  pageTitle: 'Shops Around You',
-                                  isBooking: true,
-                                  shops: aroundShops,
-                                ),
-                              );
-                            },
+                          List<Shop> aroundShops = state.shops
+                              .where((shop) =>
+                                  getDistance(shop.lat, shop.lng) <=
+                                  distanceBetween)
+                              .toList();
+                          return Column(
+                            children: [
+                              aroundShops.length != 0
+                                  ? const Text(
+                                      "Shops around 300 KM from you",
+                                      style: TextStyle(fontSize: 8.0),
+                                    )
+                                  : const Text(
+                                      "No Shops around 300 KM from you",
+                                      style: TextStyle(fontSize: 8.0),
+                                    ),
+                              aroundShops.length != 0
+                                  ? const SizedBox(
+                                      height: 5.0,
+                                    )
+                                  : const SizedBox(),
+                              aroundShops.length != 0
+                                  ? SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.1,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: [
+                                          ...aroundShops.map((e) => Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: ShopBox(shop: e)))
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox()
+                            ],
+                          );
+                        } else if (state is ShopsByCategoryLoaded) {
+                          List<Shop> aroundShops = state.shops
+                              .where((shop) =>
+                                  getDistance(shop.lat, shop.lng) <=
+                                  distanceBetween)
+                              .toList();
+                          return Column(
+                            children: [
+                              aroundShops.length != 0
+                                  ? const Text(
+                                      "Shops around 300 KM from you",
+                                      style: TextStyle(fontSize: 8.0),
+                                    )
+                                  : const Text(
+                                      "No Shops around 300 KM from you",
+                                      style: TextStyle(fontSize: 8.0),
+                                    ),
+                              aroundShops.length != 0
+                                  ? const SizedBox(
+                                      height: 5.0,
+                                    )
+                                  : const SizedBox(),
+                              aroundShops.length != 0
+                                  ? SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.1,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: [
+                                          ...aroundShops.map((e) => Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: ShopBox(shop: e)))
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox()
+                            ],
                           );
                         }
                         return Container();

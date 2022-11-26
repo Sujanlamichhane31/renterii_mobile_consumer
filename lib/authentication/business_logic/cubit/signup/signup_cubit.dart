@@ -29,19 +29,20 @@ class SignupCubit extends Cubit<SignupState> {
     String? address,
     String? description,
     required String userId,
+    String? category,
   }) async {
     try {
       await _authRepository.updateUserProfile(
-        name: name,
-        email: email,
-        phoneNumber: phoneNumber,
-        photoUrl: photoUrl,
-        userId: userId,
-        address: address,
-        description: description,
-        latitude: latitude,
-        longitude: longitude,
-      );
+          name: name,
+          email: email,
+          phoneNumber: phoneNumber,
+          photoUrl: photoUrl,
+          userId: userId,
+          address: address,
+          description: description,
+          latitude: latitude,
+          longitude: longitude,
+          category: category);
 
       _userCubit.emitUpdatedUserInfos(
         name: name,

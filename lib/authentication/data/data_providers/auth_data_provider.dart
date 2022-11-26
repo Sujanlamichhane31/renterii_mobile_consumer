@@ -195,6 +195,7 @@ class AuthDataProvider {
         'address': address ?? '',
         'latitude': latitude ?? 0.0,
         'longitude': longitude ?? 0.0,
+        'category': category ?? 0.0,
       });
 
       // if (name != null) {
@@ -282,7 +283,7 @@ class AuthDataProvider {
       final imageUrl = await profilePictureRef.getDownloadURL();
 
       doc.update({
-        'photoUrl': imageUrl,
+        'imageUrl': imageUrl,
       });
 
       return imageUrl;

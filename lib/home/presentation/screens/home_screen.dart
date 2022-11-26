@@ -339,8 +339,6 @@ class _HomeState extends State<Home> {
                       .where((shop) =>
                           getDistance(shop.lat, shop.lng) <= distanceBetween)
                       .toList();
-                  print('shops: ${shops.length}');
-                  print('state shops: ${state.shops.length}');
                   return Container(
                     height: 160,
                     margin: const EdgeInsets.only(left: 20),

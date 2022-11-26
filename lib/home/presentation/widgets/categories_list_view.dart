@@ -63,11 +63,7 @@ class _CategoriesListViewState extends State<CategoriesListView> {
                       ),
                     ),
                     onTap: () async {
-                      if (_value == index) {
-                        setState(() {
-                          _value = -1;
-                        });
-                      } else {
+                      if (_value != index) {
                         setState(() {
                           _value = index;
                         });

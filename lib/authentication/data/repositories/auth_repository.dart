@@ -120,6 +120,7 @@ class AuthRepository {
     double? latitude,
     double? longitude,
     String? description,
+    String? category,
   }) async {
     try {
       await _authDataProvider.updateUserProfile(
@@ -131,6 +132,7 @@ class AuthRepository {
           description: description,
           latitude: latitude,
           longitude: longitude,
+          category: category,
           userId: userId);
     } catch (error) {
       rethrow;

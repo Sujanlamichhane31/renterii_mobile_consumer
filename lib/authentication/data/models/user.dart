@@ -65,7 +65,7 @@ class CurrentUser extends Equatable {
       'id': id,
       'name': name,
       'email': email,
-      'photoUrl': photoUrl,
+      'imageUrl': photoUrl,
       'phoneNumber': phoneNumber,
       'address': address,
       'addressType': addressType,
@@ -86,7 +86,7 @@ class CurrentUser extends Equatable {
       category: map['category'] as String,
       description: map['description'] as String,
       email: map['email'] as String,
-      photoUrl: map['photoUrl'] as String,
+      photoUrl: map['imageUrl'] as String,
       phoneNumber: map['phoneNumber'] as String,
       address: map['address'] as String,
       addressType: map['addressType'] as String,
@@ -139,7 +139,7 @@ class CurrentUser extends Equatable {
 
   @override
   String toString() {
-    return 'CurrentUser{id: $id, name: $name, email: $email, photoUrl: $photoUrl, '
+    return 'CurrentUser{id: $id, name: $name, email: $email, imageUrl: $photoUrl, '
         'phoneNumber: $phoneNumber, address: $address, addressType: $addressType, '
         'latitude: $latitude, longitude: $longitude, walletBalance: $walletBalance, '
         'transactions: $transactions}';

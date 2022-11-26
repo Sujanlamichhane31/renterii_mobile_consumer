@@ -16,8 +16,8 @@ List<String> stops = [
 ];
 
 final CameraPosition kGooglePlex = CameraPosition(
-  target: LatLng(37.42796133580664, -122.085749655962),
-  zoom: 14.4746,
+  target: LatLng(43.651070, -75.6972),
+  zoom: 18,
 );
 
 class MapUtils {
@@ -25,8 +25,8 @@ class MapUtils {
     // var desc = await BitmapDescriptor.fromAssetImage(
     //         ImageConfiguration(devicePixelRatio: 5), Assets.icPin)
     //     .then((value) => icon = value);
-    markerss.add(await createBitmapDescriptorFromImage(
-        'images/map_pin.png', ''));
+    markerss
+        .add(await createBitmapDescriptorFromImage('images/map_pin.png', ''));
     // markerss.add(await createBitmapDescriptorFromImage('assets/Pickup.png',''));
     // markerss.add(await createBitmapDescriptorFromImage('assets/drop.png',''));
   }

@@ -353,6 +353,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               description: _descriptionController.text,
                               latitude: lat,
                               longitude: long,
+                              category: _choosenCategory,
                             );
                       }
                     }),
