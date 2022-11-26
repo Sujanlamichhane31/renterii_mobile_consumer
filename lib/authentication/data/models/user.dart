@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -21,11 +20,13 @@ class CurrentUser extends Equatable {
   final String? addressType;
   final double? latitude;
   final double? longitude;
+  final String? description;
   final double? walletBalance;
+  final String? category;
   final DocumentReference? firestoreDocReference;
   final List<UserTransaction>? transactions;
 
-  const CurrentUser({
+  CurrentUser({
     required this.id,
     required this.name,
     this.email,
@@ -35,9 +36,11 @@ class CurrentUser extends Equatable {
     this.addressType,
     this.latitude,
     this.longitude,
+    this.description,
     this.walletBalance,
     this.firestoreDocReference,
     this.transactions,
+    this.category,
   });
 
   const CurrentUser.empty({
@@ -53,6 +56,8 @@ class CurrentUser extends Equatable {
     this.walletBalance,
     this.transactions,
     this.firestoreDocReference,
+    this.category,
+    this.description,
   });
 
   Map<String, dynamic> toMap() {
@@ -69,6 +74,8 @@ class CurrentUser extends Equatable {
       // 'transactions': json.encode(transactions?.asMap() ?? [{}]),
       'walletBalance': walletBalance,
       // 'firestoreDocReference': firestoreDocReference,
+      'category': category,
+      'description': description,
     };
   }
 
@@ -76,6 +83,8 @@ class CurrentUser extends Equatable {
     return CurrentUser(
       id: map['id'] as String,
       name: map['name'] as String,
+      category: map['category'] as String,
+      description: map['description'] as String,
       email: map['email'] as String,
       photoUrl: map['photoUrl'] as String,
       phoneNumber: map['phoneNumber'] as String,
@@ -102,6 +111,7 @@ class CurrentUser extends Equatable {
     double? walletBalance,
     dynamic? transactions,
     DocumentReference? firestoreDocReference,
+    String? description,
   }) {
     return CurrentUser(
       id: id ?? this.id,
@@ -109,6 +119,8 @@ class CurrentUser extends Equatable {
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      description: description ?? this.description,
+      category: category ?? this.category,
       address: address ?? this.address,
       addressType: addressType ?? this.addressType,
       latitude: latitude ?? this.latitude,
@@ -139,6 +151,7 @@ class CurrentUser extends Equatable {
         name,
         email,
         photoUrl,
+        description,
         phoneNumber,
         address,
         addressType,

@@ -12,21 +12,37 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- See https://developer.android.com/training/package-visibility/declaring for more details. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <queries>
+
+        <!-- If your app makes calls -->
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+
+            <data android:scheme="tel" />
+        </intent>
+        <!-- If your app sends emails -->
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+
+            <data android:mimeType="*/*" />
+        </intent>
 
         <!-- Added to check the default browser that will host the AuthFlow. -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
 
             <data android:scheme="http" />
-        </intent>
-        <!-- Added to check if Chrome is installed for browser-based payment authentication (e.g. 3DS1). -->
+        </intent> <!-- Added to check if Chrome is installed for browser-based payment authentication (e.g. 3DS1). -->
         <package android:name="com.android.chrome" /> <!-- Needs to be explicitly declared on Android R+ -->
         <package android:name="com.google.android.apps.maps" />
     </queries>
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
@@ -39,6 +55,10 @@
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="renterii" >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB8HZG30Vs2l7AyxnjvNKh1t0sMZFhuKio" />
+
         <activity
             android:name="com.example.renterii.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -71,9 +91,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB8HZG30Vs2l7AyxnjvNKh1t0sMZFhuKio" />
 
         <service
             android:name="com.google.firebase.components.ComponentDiscoveryService"

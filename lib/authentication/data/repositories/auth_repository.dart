@@ -116,6 +116,10 @@ class AuthRepository {
     String? phoneNumber,
     String? photoUrl,
     required String userId,
+    String? address,
+    double? latitude,
+    double? longitude,
+    String? description,
   }) async {
     try {
       await _authDataProvider.updateUserProfile(
@@ -123,6 +127,10 @@ class AuthRepository {
           email: email,
           phoneNumber: phoneNumber,
           photoUrl: photoUrl,
+          address: address,
+          description: description,
+          latitude: latitude,
+          longitude: longitude,
           userId: userId);
     } catch (error) {
       rethrow;

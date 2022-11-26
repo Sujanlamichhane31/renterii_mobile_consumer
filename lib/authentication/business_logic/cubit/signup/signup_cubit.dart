@@ -24,6 +24,10 @@ class SignupCubit extends Cubit<SignupState> {
     String? email,
     String? phoneNumber,
     String? photoUrl,
+    double? latitude,
+    double? longitude,
+    String? address,
+    String? description,
     required String userId,
   }) async {
     try {
@@ -33,6 +37,10 @@ class SignupCubit extends Cubit<SignupState> {
         phoneNumber: phoneNumber,
         photoUrl: photoUrl,
         userId: userId,
+        address: address,
+        description: description,
+        latitude: latitude,
+        longitude: longitude,
       );
 
       _userCubit.emitUpdatedUserInfos(

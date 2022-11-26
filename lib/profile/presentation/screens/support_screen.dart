@@ -1,51 +1,37 @@
-import 'dart:convert';
-
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/profile/presentation/widgets/text_field.dart';
 import 'package:renterii/rentals/presentation/widgets/bottom_bar.dart';
 import 'package:renterii/theme_cubit.dart';
+import 'package:renterii/utils/extension.dart';
 
-class SupportPage extends StatelessWidget {
+class SupportPage extends StatefulWidget {
+  static const String id = 'support_page';
   final String? number;
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController messageController = TextEditingController();
 
-  SupportPage({
-    Key? key,
-    this.number,
-  }) : super(key: key);
+  SupportPage({Key? key, this.number}) : super(key: key);
 
-  Future sendMail(
-      {required String phone,
-      required String message,
-      BuildContext? context}) async {
-    if (phone.isNotEmpty && message.isNotEmpty) {
-      const serviceId = 'service_cu7pvvj';
-      const templateId = 'template_jj20nuo';
-      const userId = 'eGdURSuqA3ZPJ8FDJ';
-      const accessToken = 'z74l-dtqXCieWkDtkWAMb';
-      final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
-      final response = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({
-            'service_id': serviceId,
-            'template_id': templateId,
-            'user_id': userId,
-            'accessToken': accessToken,
-            'template_params': {'from_name': phone, 'message': message}
-          }));
-    } else {
-      const snackBar = SnackBar(
-          content: Text('Please, fill out all necessary information!'));
-      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
-    }
+  @override
+  State<SupportPage> createState() => _SupportPageState();
+}
+
+class _SupportPageState extends State<SupportPage> {
+  TextEditingController _numberController = TextEditingController();
+  TextEditingController _messageController = TextEditingController();
+  GlobalKey<FormState> supportPageKey = GlobalKey();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _numberController = TextEditingController();
+    _messageController = TextEditingController();
+    super.initState();
   }
 
+  // Future sendMail(
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,21 +111,41 @@ class SupportPage extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: Column(
-                                children: [
-                                  inputField(
-                                      AppLocalizations.of(context)!
-                                          .mobileNumber!,
-                                      '+1 987 654 3210',
-                                      'images/icons/ic_phone.png',
-                                      phoneController!),
-                                  inputField(
-                                      AppLocalizations.of(context)!.message!,
-                                      AppLocalizations.of(context)!
-                                          .enterMessage,
-                                      'images/icons/ic_mail.png',
-                                      messageController!),
-                                ],
+                              child: Form(
+                                key: supportPageKey,
+                                child: Column(
+                                  children: [
+                                    inputField(
+                                        title: AppLocalizations.of(context)!
+                                            .mobileNumber!,
+                                        hint: '+1 987 654 3210',
+                                        img: 'images/icons/mobile.png',
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Mobile Number is required';
+                                          } else if (value.isValidNumber()) {
+                                            return 'Please enter valid number';
+                                          }
+                                          {
+                                            return null;
+                                          }
+                                        },
+                                        controller: _numberController),
+                                    inputField(
+                                        title: AppLocalizations.of(context)!
+                                            .message!,
+                                        hint: "Enter your message here",
+                                        img: 'images/icons/message.png',
+                                        validator: (value) {
+                                          if (value!.trim().isEmpty) {
+                                            return 'Message is empty';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        controller: _messageController),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -163,10 +169,17 @@ class SupportPage extends StatelessWidget {
             child: BottomBar(
               text: 'Submit',
               // text: AppLocalizations.of(context)!.submit,
+
               onTap: () {
-                String phone = phoneController.text;
-                String message = messageController.text;
-                sendMail(phone: phone, message: message, context: context);
+                if (supportPageKey.currentState!.validate()) {
+                  supportPageKey.currentState!.save();
+
+                  // sendMail(phone: phone, message: message, context: context);
+                  'hello@renterii.com'.sendMail(
+                      body:
+                          "Respected sir/Madam,\n\n \nPhone Number - ${_numberController.text}\n\n\n ${_messageController.text}\n\nRegards,\n ",
+                      subject: 'Message about the application');
+                }
               },
             ),
           ),
@@ -175,39 +188,50 @@ class SupportPage extends StatelessWidget {
     );
   }
 
-  Column inputField(String title, String? hint, String img,
-      TextEditingController controller) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            SizedBox(
-              height: 20,
-              child: Image(
-                image: AssetImage(
-                  img,
-                ),
-                color: kMainColor,
-              ),
-            ),
-            const SizedBox(
-              width: 13,
-            ),
-            Text(title, style: TextStyle(color: Colors.grey[600], fontSize: 12))
-          ],
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 33),
-          child: Column(
+  Container inputField(
+      {String? title,
+      String? hint,
+      String? img,
+      String? Function(String?)? validator,
+      required TextEditingController controller}) {
+    return Container(
+      child: Column(
+        children: [
+          Row(
             children: [
-              SmallTextFormField(null, hint, controller),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: 20,
+                child: Image(
+                  image: AssetImage(
+                    img ?? '',
+                  ),
+                  color: kMainColor,
+                ),
               ),
+              const SizedBox(
+                width: 13,
+              ),
+              Text(title ?? '',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12))
             ],
           ),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.only(left: 25),
+            child: Column(
+              children: [
+                SmallTextFormField(
+                  title: hint,
+                  validator: validator,
+                  controller: controller,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

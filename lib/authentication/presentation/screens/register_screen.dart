@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animation_wrappers/animation_wrappers.dart';
@@ -8,7 +9,12 @@ import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/signup/signup_cubit.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
+import 'package:renterii/authentication/presentation/screens/location_screen.dart';
+import 'package:renterii/authentication/presentation/widgets/register_text_field.dart';
+import 'package:renterii/rentals/presentation/screens/shops_map_screen.dart';
 import 'package:renterii/routes/app_router.gr.dart';
+import 'package:renterii/utils/constant.dart';
+import 'package:renterii/utils/extension.dart';
 
 import '../widgets/bottom_bar.dart';
 import '../widgets/image_upload.dart';
@@ -24,7 +30,7 @@ class RegisterScreen extends StatelessWidget {
     return BlocListener<SignupCubit, SignupState>(
       listener: (context, state) {
         if (state is SignupInfosSuccess) {
-          context.router.replace(const LocationScreenRoute());
+          context.router.replaceNamed('app');
         } else if (state is SignupInfosFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -82,6 +88,12 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   // RegisterBloc _registerBloc;
+  GlobalKey<FormState> registerKey = GlobalKey();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  double lat = 0.0;
+  double long = 0.0;
+  String? _choosenCategory;
 
   @override
   void initState() {
@@ -94,6 +106,9 @@ class _RegisterFormState extends State<RegisterForm> {
     _nameController.dispose();
     _emailController.dispose();
     _phoneNumberController.dispose();
+    _addressController.dispose();
+    _descriptionController.dispose();
+
     super.dispose();
   }
 
@@ -102,89 +117,248 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         final user = state.user;
-
         _nameController.text = user.name ?? '';
         _emailController.text = user.email ?? '';
         _phoneNumberController.text = user.phoneNumber ?? '';
 
-        return Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                      color: Theme.of(context).cardColor,
-                      thickness: 8.0,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    ImageUpload(
-                      imageUrl: user.photoUrl,
-                      onSetImage: (File image) {
-                        context
-                            .read<SignupCubit>()
-                            .updateUserProfilePicture(image: image!);
-                      },
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    inputField(
-                      AppLocalizations.of(context)!.fullName!.toUpperCase(),
-                      '',
-                      'images/icons/ic_name.png',
-                      _nameController,
-                      TextInputType.name,
-                    ),
-                    //name textField
-                    //email textField
-                    inputField(
-                      //controller: _emailController,
-                      AppLocalizations.of(context)!.emailAddress!.toUpperCase(),
-                      '',
-                      'images/icons/ic_mail.png',
-                      _emailController,
-                      TextInputType.emailAddress,
-                    ),
+        return Form(
+          key: registerKey,
+          child: Stack(
+            children: <Widget>[
+              ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                children: <Widget>[
+                  Divider(
+                    color: Theme.of(context).cardColor,
+                    thickness: 8.0,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ImageUpload(
+                    imageUrl: user.photoUrl,
+                    onSetImage: (File image) {
+                      context
+                          .read<SignupCubit>()
+                          .updateUserProfilePicture(image: image);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  RegisterTextField(
+                    onlyRead: false,
+                    textEditingController: _nameController,
+                    title:
+                        AppLocalizations.of(context)!.fullName!.toUpperCase(),
+                    hint: "Your full name",
+                    img: 'images/icons/ic_name.png',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Name should not be empty';
+                      }
+                      return null;
+                    },
+                  ),
 
-                    //phone textField
-                    inputField(
-                      AppLocalizations.of(context)!.mobileNumber!.toUpperCase(),
-                      widget.phoneNumber ?? '',
-                      'images/icons/ic_phone.png',
-                      _phoneNumberController,
-                      TextInputType.phone,
-                    ),
-                  ],
-                ),
+                  RegisterTextField(
+                    onlyRead: false,
+                    textEditingController: _descriptionController,
+                    title: "Description".toUpperCase(),
+                    hint: 'your description',
+                    img: 'images/icons/ic_phone.png',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Brief description is required';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: 22,
+                            child: Image(
+                              image: const AssetImage(
+                                'images/icons/ic_phone.png',
+                              ),
+                              color: kMainColor,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 13,
+                          ),
+                          Text("Category".toUpperCase(),
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 12))
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 25),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                children: [
+                                  const SizedBox.shrink(),
+                                  DropdownButtonFormField(
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        prefixStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                                color: Colors.black,
+                                                fontSize: 12),
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.grey[200]!),
+                                        ),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.grey[200]!),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.grey[200]!),
+                                        ),
+                                      ),
+                                      hint: const Text("Select Category"),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .copyWith(
+                                              color: Colors.black,
+                                              fontSize: 14),
+                                      value: _choosenCategory,
+                                      validator: ((value) {
+                                        if (_choosenCategory == null) {
+                                          return 'Please select category';
+                                        } else {
+                                          return null;
+                                        }
+                                      }),
+                                      items: profileCategory.map((profile) {
+                                        return DropdownMenuItem<String>(
+                                          child: Text(profile.name),
+                                          value: profile.categoryId,
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        _choosenCategory = value;
+                                      }),
+                                  const SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  //name textField
+                  //email textField
+                  RegisterTextField(
+                    onlyRead: false,
+                    textEditingController: _emailController,
+                    title: AppLocalizations.of(context)!
+                        .emailAddress!
+                        .toUpperCase(),
+                    hint: 'abc@gmail.com',
+                    img: 'images/icons/ic_phone.png',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email Address is required';
+                      } else if (!value.isValidEmail()) {
+                        return 'Email address is not valid';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+
+                  //phone textField
+                  RegisterTextField(
+                    onlyRead: false,
+                    textEditingController: _phoneNumberController,
+                    title: AppLocalizations.of(context)!
+                        .mobileNumber!
+                        .toUpperCase(),
+                    hint: '+1 987 654 3210',
+                    img: 'images/icons/ic_phone.png',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Number is required';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+
+                  RegisterTextField(
+                    textEditingController: _addressController,
+                    title: "Address".toUpperCase(),
+                    hint: "Select your address",
+                    onlyRead: true,
+                    onTap: () async {
+                      final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => LocationScreen(
+                                    textEditingController: _addressController,
+                                  )));
+                      lat = result["lat"];
+                      long = result["long"];
+                    },
+                    img: 'images/location.png',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Set location';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                  )
+                ],
               ),
-            ),
-            //continue button bar
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: BottomBar(
-                  text: AppLocalizations.of(context)!.continueText,
-                  onTap: () {
-                    if (_nameController.text == '') {
-                      return;
-                    }
-
-                    context.read<SignupCubit>().updateUserProfile(
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          phoneNumber: _phoneNumberController.text,
-                          userId: context.read<UserCubit>().state.user.id,
-                        );
-                    if (widget.phoneNumber == null) {
-                      // TODO: Verify phoneNumber
-                      // TODO: Navigate to verification page
-                    }
-                  }),
-            )
-          ],
+              //continue button bar
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BottomBar(
+                    text: AppLocalizations.of(context)!.continueText,
+                    onTap: () {
+                      if (registerKey.currentState!.validate()) {
+                        registerKey.currentState!.save();
+                        context.read<SignupCubit>().updateUserProfile(
+                              name: _nameController.text,
+                              email: _emailController.text,
+                              phoneNumber: _phoneNumberController.text,
+                              userId: context.read<UserCubit>().state.user.id,
+                              photoUrl: user.photoUrl,
+                              address: _addressController.text,
+                              description: _descriptionController.text,
+                              latitude: lat,
+                              longitude: long,
+                            );
+                      }
+                    }),
+              )
+            ],
+          ),
         );
       },
     );
@@ -224,7 +398,6 @@ class _RegisterFormState extends State<RegisterForm> {
                 controller: controller,
                 label: null,
                 title: hint,
-                keyboardType: keyboardType,
               ),
               const SizedBox(
                 height: 10,

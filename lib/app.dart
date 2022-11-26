@@ -38,52 +38,52 @@ class _AppState extends State<App> {
 
   @override
   Widget build(context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.userChanges(),
-      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-        final loginStatus = context.read<UserCubit>().state.status;
-        if (snapshot.hasData || loginStatus == UserStatus.logout) {
-          return const LoginScreen();
-        } else {
-          return AutoTabsScaffold(
-            routes: const [
-              HomeScreenRoute(),
-              MyOrdersScreenRoute(),
-              ProfileScreenRoute(),
-            ],
-            bottomNavigationBuilder: (_, tabsRouter) {
-              return BottomNavigationBar(
-                type: BottomNavigationBarType.shifting,
-                showUnselectedLabels: true,
-                showSelectedLabels: true,
-                unselectedItemColor: Colors.black,
-                selectedItemColor: kMainColor,
-                selectedLabelStyle:
-                    const TextStyle(fontWeight: FontWeight.bold),
-                currentIndex: tabsRouter.activeIndex,
-                onTap: tabsRouter.setActiveIndex,
-                items: [
-                  const BottomNavigationBarItem(
-                      icon: Icon(Icons.home), label: 'Home'),
-                  BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 7),
-                        child:
-                            SvgPicture.asset('images/logo_svg.svg', width: 30),
-                      ),
-                      label: 'Rentals',
-                      activeIcon: Padding(
-                        padding: const EdgeInsets.only(bottom: 7),
-                        child: SvgPicture.asset('images/logo_svg_colored.svg',
-                            width: 30),
-                      )),
-                  const BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: 'Profile'),
-                ],
-              );
-            },
-          );
-        }
+    // return StreamBuilder(
+    //   stream: FirebaseAuth.instance.userChanges(),
+    //   builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+    //     final loginStatus = context.read<UserCubit>().state.status;
+    //     if (snapshot.hasData || loginStatus == UserStatus.logout) {
+    //       log("fasdfasdfasdfasdfa");
+    //       return const LoginScreen();
+    //     } else {
+
+    //     }
+    //   },
+    // );
+    return AutoTabsScaffold(
+      routes: const [
+        HomeScreenRoute(),
+        MyOrdersScreenRoute(),
+        ProfileScreenRoute(),
+      ],
+      bottomNavigationBuilder: (_, tabsRouter) {
+        return BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
+          showUnselectedLabels: true,
+          showSelectedLabels: true,
+          unselectedItemColor: Colors.black,
+          selectedItemColor: kMainColor,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          currentIndex: tabsRouter.activeIndex,
+          onTap: tabsRouter.setActiveIndex,
+          items: [
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: SvgPicture.asset('images/logo_svg.svg', width: 30),
+                ),
+                label: 'Rentals',
+                activeIcon: Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: SvgPicture.asset('images/logo_svg_colored.svg',
+                      width: 30),
+                )),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person), label: 'Profile'),
+          ],
+        );
       },
     );
   }
