@@ -33,11 +33,11 @@ import '../shops/presentation/screens/shops_screen.dart';
     AutoRoute(page: LocationScreen),
     AutoRoute(
       page: LoginScreen,
-      initial: true,
     ),
     AutoRoute(
       path: 'app',
       page: App,
+      initial: true,
       children: [
         AutoRoute(page: HomeScreen, initial: true),
         AutoRoute(page: MyOrdersScreen),

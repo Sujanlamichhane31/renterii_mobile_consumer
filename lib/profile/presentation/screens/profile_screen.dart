@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:renterii/profile/presentation/screens/support_screen.dart';
 import 'package:renterii/profile/presentation/screens/wallet_screen.dart';
 import 'package:renterii/profile/presentation/widgets/list_tile.dart';
 import 'package:renterii/routes/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../theme_cubit.dart';
@@ -71,8 +74,8 @@ class _AccountState extends State<Account> {
           small: true,
           image: 'images/account/ic_menu_wallet.png',
           text: AppLocalizations.of(context)!.wallet,
-          onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const WalletScreen())),
+          onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const WalletScreen())),
         ),
         // AddressTile(),
         // BuildListTile(
@@ -189,8 +192,11 @@ class LogoutTile extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: kTransparentColor)),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   context.read<UserCubit>().logout();
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('isLoggedin');
+                  context.router.replaceNamed('app');
                 },
               )
             ],

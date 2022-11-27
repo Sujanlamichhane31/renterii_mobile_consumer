@@ -855,7 +855,7 @@
     },
     {
       "name": "shared_preferences_android",
-      "rootUri": "file:///Users/aabhashrai/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.12",
+      "rootUri": "file:///Users/aabhashrai/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.14",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -879,7 +879,7 @@
     },
     {
       "name": "shared_preferences_platform_interface",
-      "rootUri": "file:///Users/aabhashrai/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0",
+      "rootUri": "file:///Users/aabhashrai/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -1106,7 +1106,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-11-27T16:32:23.045636Z",
+  "generated": "2022-11-27T17:47:34.637035Z",
   "generator": "pub",
   "generatorVersion": "2.18.1"
 }

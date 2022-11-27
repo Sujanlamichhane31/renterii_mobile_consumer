@@ -209,11 +209,13 @@ class AppRouter extends _i26.RootStackRouter {
 
   @override
   List<_i26.RouteConfig> get routes => [
+        _i26.RouteConfig('/#redirect',
+            path: '/', redirectTo: 'app', fullMatch: true),
         _i26.RouteConfig(RegisterScreenRoute.name, path: '/register-screen'),
         _i26.RouteConfig(VerificationScreenRoute.name,
             path: '/verification-screen'),
         _i26.RouteConfig(LocationScreenRoute.name, path: '/location-screen'),
-        _i26.RouteConfig(LoginScreenRoute.name, path: '/'),
+        _i26.RouteConfig(LoginScreenRoute.name, path: '/login-screen'),
         _i26.RouteConfig(AppRoute.name, path: 'app', children: [
           _i26.RouteConfig(HomeScreenRoute.name,
               path: '', parent: AppRoute.name),
@@ -322,7 +324,8 @@ class LocationScreenRouteArgs {
 /// generated route for
 /// [_i4.LoginScreen]
 class LoginScreenRoute extends _i26.PageRouteInfo<void> {
-  const LoginScreenRoute() : super(LoginScreenRoute.name, path: '/');
+  const LoginScreenRoute()
+      : super(LoginScreenRoute.name, path: '/login-screen');
 
   static const String name = 'LoginScreenRoute';
 }

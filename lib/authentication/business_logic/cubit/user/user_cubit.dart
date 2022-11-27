@@ -8,6 +8,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:renterii/authentication/data/models/transaction.dart';
 import 'package:renterii/authentication/data/models/user.dart';
 import 'package:renterii/authentication/data/repositories/wallet_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../shared/enums.dart';
 import '../../../data/repositories/auth_repository.dart';
@@ -157,7 +158,11 @@ class UserCubit extends HydratedCubit<UserState> {
       );
 
       // await EasyLoading.dismiss();
-
+      if (userData['token'] != null) {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        await sharedPreferences.setString("isLoggedin", "yes");
+      }
       emit(
         state.copyWith(
           status: UserStatus.loginSuccess,

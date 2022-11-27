@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/theme_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/mobile_input.dart';
 
@@ -21,9 +24,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _otpTextEditingController =
-      TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
             context.router.replace(RegisterScreenRoute());
           } else if (state.status == UserStatus.loginGoogleSuccess &&
               !state.isNewUser) {
+            log("messagedddd");
             context.router.replaceNamed('app');
           } else if (state.status == UserStatus.loginOtpSent) {
+            log("jndjnjpnmdmnojdnojd");
             context.router.push(
               const VerificationScreenRoute(),
             );
