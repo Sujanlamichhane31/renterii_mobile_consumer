@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:renterii/routes/app_router.gr.dart';
-
 import '../../../Locale/locales.dart';
 import '../../../Themes/colors.dart';
 import '../../../rentals/presentation/widgets/bottom_bar.dart';

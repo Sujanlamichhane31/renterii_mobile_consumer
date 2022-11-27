@@ -12,7 +12,6 @@ import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
 import 'package:renterii/shops/presentation/screens/deals_screen.dart';
-import '../../../shared/utils/geolocator.dart';
 import '../widgets/booking_row.dart';
 
 // import 'booking_row.dart';
@@ -48,7 +47,7 @@ class _HomeState extends State<Home> {
 
   List<Shop> shops = <Shop>[];
   List<Shop> aroundShops = <Shop>[];
-  double distanceBetween = 300.0;
+  double distanceBetween = 3000.0;
   @override
   void initState() {
     // BlocProvider.of<ShopCubit>(context).getAllShops();
@@ -143,17 +142,6 @@ class _HomeState extends State<Home> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // FadedScaleAnimation(
-                                    //   child: Image.asset(
-                                    //     categories[index].image,
-                                    //     height: 37.3,
-                                    //     width: 41.3,
-                                    //   ),
-                                    //   fadeDuration: Duration(milliseconds: 200),
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 16.0,
-                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
@@ -477,13 +465,11 @@ class _HomeState extends State<Home> {
       child: GestureDetector(
         onTap: () {
           dynamic ratingTotal = 0;
-          log(shop.rating.isNotEmpty);
           if (shop.rating.isNotEmpty) {
             for (dynamic rating in shop.rating) {
               ratingTotal += rating['start'];
             }
           }
-          log(shop.rating);
           context.router.push(ShopScreenRoute(
               rating: ratingTotal != 0
                   // ? (ratingTotal / shop.rating.length).toDouble() ?? 0
@@ -512,18 +498,20 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(shop.title,
+                    maxLines: 2,
                     //AppLocalizations.of(context)!.store!,
                     style: Theme.of(context).textTheme.subtitle2!.copyWith(
                         color: Theme.of(context).secondaryHeaderColor,
                         fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis)),
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 17)),
                 const SizedBox(height: 8.0),
                 // Replace this text with the category
                 Text(
                   shop.categoryName.isNotEmpty ? shop.categoryName : '',
                   style: Theme.of(context).textTheme.caption!.copyWith(
                         color: Theme.of(context).secondaryHeaderColor,
-                        fontSize: 10.0,
+                        fontSize: 12.0,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -540,66 +528,43 @@ class _HomeState extends State<Home> {
                     Text('${getDistance(shop.lat, shop.lng).round()} km',
                         style: Theme.of(context).textTheme.caption!.copyWith(
                             color: kLightTextColor,
-                            fontSize: 10.0,
+                            fontSize: 12.0,
                             fontWeight: FontWeight.bold)),
-                    Text(' | ',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption!
-                            .copyWith(color: kMainColor, fontSize: 10.0)),
-                    FutureBuilder(
-                        future: getAddressDataFromLatLng(
-                            latitude: shop.lat, longitude: shop.lng),
-                        builder: (context, snapshot) {
-                          final address = snapshot.data;
-                          if (address == null) {
-                            return Container();
-                          }
-                          log((address
-                              as Map<String, dynamic>)['address_components']);
-                          log((address as Map<String, dynamic>)[
-                                  'address_components']
-                              .toList()[0]['short_name']);
-                          if ((address as Map<String, dynamic>)[
-                                      'address_components']
-                                  .toList()
-                                  .length >
-                              1) {
-                            log(">1");
-                            log((address as Map<String, dynamic>)[
-                                    'address_components']
-                                .toList());
-                          } else {
-                            log("Normal");
-                            log((address as Map<String, dynamic>)[
-                                    'address_components']
-                                .toList()[0]['short_name']);
-                          }
-                          return SizedBox(
-                            // width: double.infinity,
-                            // width: MediaQuery.of(context).size.width*0.5,
-                            child: Text(
-                              (address as Map<String, dynamic>)[
-                                      'address_components']
-                                  .toList()[0]['short_name']
-                                  .toString(),
-                              // 'Hello',
-                              maxLines: 1,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              //AppLocalizations.of(context)!.storeAddress!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(
-                                    color:
-                                        Theme.of(context).secondaryHeaderColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10.0,
-                                  ),
-                            ),
-                          );
-                        }),
+
+                    //doesn't look good with grid view
+                    // FutureBuilder(
+                    //     future: getAddressDataFromLatLng(
+                    //         latitude: shop.lat, longitude: shop.lng),
+                    //     builder: (context, snapshot) {
+                    //       final address = snapshot.data;
+                    //       if (address == null) {
+                    //         return const SizedBox();
+                    //       }
+
+                    //       return SizedBox(
+                    //         width: MediaQuery.of(context).size.width * 0.2,
+                    //         child: Text(
+                    //           (address as Map<String, dynamic>)[
+                    //                   'address_components']
+                    //               .toList()[0]['short_name']
+                    //               .toString(),
+                    //           // 'Hello',
+                    //           maxLines: 1,
+                    //           softWrap: false,
+                    //           overflow: TextOverflow.ellipsis,
+                    //           //AppLocalizations.of(context)!.storeAddress!,
+                    //           style: Theme.of(context)
+                    //               .textTheme
+                    //               .caption!
+                    //               .copyWith(
+                    //                 color:
+                    //                     Theme.of(context).secondaryHeaderColor,
+                    //                 fontWeight: FontWeight.bold,
+                    //                 fontSize: 10.0,
+                    //               ),
+                    //         ),
+                    //       );
+                    //     }),
                   ],
                 ),
               ],

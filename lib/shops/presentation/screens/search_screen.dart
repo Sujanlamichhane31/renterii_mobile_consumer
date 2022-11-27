@@ -1,14 +1,11 @@
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
-import 'package:renterii/rentals/business_logic/cubit/shops/shops_cubit.dart';
 import 'package:renterii/routes/app_router.gr.dart';
-import 'package:renterii/shops/business_logic/cubit/product/product_cubit.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 
 import '../../data/models/shop.dart';
@@ -210,18 +207,14 @@ class _SearchScreenState extends State<SearchScreen> {
             return InkWell(
               onTap: () {
                 dynamic ratingTotal = 0;
-                print(allShops[index].rating.isNotEmpty);
                 if (allShops[index].rating.isNotEmpty) {
                   for (dynamic rating in allShops[index].rating) {
                     ratingTotal += rating['start'];
                   }
                 }
-                // BlocProvider.of<ProductCubit>(context)
-                //     .getAllProducts(allShops[index].id);
                 context.router.push(
                   ShopScreenRoute(
                       rating: ratingTotal != 0
-                          // ? (ratingTotal / shop.rating.length).toDouble() ?? 0
                           ? (ratingTotal / allShops[index].rating.length)
                                   .toStringAsFixed(1) ??
                               '0'
@@ -239,7 +232,7 @@ class _SearchScreenState extends State<SearchScreen> {
               },
               child: Padding(
                 padding:
-                    const EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
+                    const EdgeInsets.only(left: 10.0, top: 20.0, right: 10.0),
                 child: Row(
                   children: <Widget>[
                     SizedBox(
@@ -289,7 +282,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     .textTheme
                                     .caption!
                                     .copyWith(
-                                        color: Color(0xfff4cec9),
+                                        color: const Color(0xfff4cec9),
                                         fontSize: 10.0,
                                         fontWeight: FontWeight.bold)),
                           ],
@@ -303,30 +296,39 @@ class _SearchScreenState extends State<SearchScreen> {
                               size: 15,
                             ),
                             const SizedBox(width: 10.0),
-                            Text(
-                                '${getDistance(allShops[index].lat, allShops[index].lng).round()} km',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(
-                                        color: kHintColor, fontSize: 10.0)),
+                            SizedBox(
+                              width: 50,
+                              child: Text(
+                                  '${getDistance(allShops[index].lat, allShops[index].lng).round()} km',
+                                  maxLines: 2,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .copyWith(
+                                          color: kHintColor, fontSize: 12.0)),
+                            ),
                             Text('| ',
+                                maxLines: 2,
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption!
                                     .copyWith(
-                                        color: kMainColor, fontSize: 10.0)),
-                            Text(
-                              allShops[index].address,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(
-                                    color:
-                                        Theme.of(context).secondaryHeaderColor,
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                        color: kMainColor, fontSize: 12.0)),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.2,
+                              child: Text(
+                                allShops[index].address,
+                                maxLines: 2,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(
+                                      color: Theme.of(context)
+                                          .secondaryHeaderColor,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
                           ],
                         ),

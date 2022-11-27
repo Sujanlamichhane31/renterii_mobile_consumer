@@ -20,8 +20,8 @@ class ShopRepository {
             docSnapshot.data() as Map<String, dynamic>;
 
         final categoryData = (await docData['category'].get()).data();
-        if (docData['ratings'] != null) {
-          for (dynamic rate in docData['ratings']) {
+        if (docData['rating'] != null) {
+          for (dynamic rate in docData['rating']) {
             final rateResp =
                 (await (rate['userId'] as DocumentReference).get()).data();
             if (rateResp != null) {
@@ -45,7 +45,7 @@ class ShopRepository {
             category: docData['category'] ?? '',
             isPopular: docData['isPopular'] ?? false,
             categoryName: categoryData['name'],
-            rating: docData['ratings'] ?? ''));
+            rating: docData['rating'] ?? ''));
       }
       print('shop: ${allShops[0]}');
       return allShops;
@@ -88,7 +88,7 @@ class ShopRepository {
             category: docData['category'] ?? '',
             isPopular: docData['isPopular'] ?? false,
             categoryName: categoryData['name'],
-            rating: docData['ratings'] ?? '',
+            rating: docData['rating'] ?? '',
             products: []);
         print(shop.id);
         final QuerySnapshot shopsDocumentsSnapshot =
@@ -136,7 +136,7 @@ class ShopRepository {
             category: docData['category'] ?? '',
             isPopular: docData['isPopular'] ?? false,
             categoryName: categoryData['name'],
-            rating: docData['ratings'] ?? '',
+            rating: docData['rating'] ?? '',
             products: []);
         final QuerySnapshot shopsDocumentsSnapshot =
             await shopDataProvider.fetchProductsByShopId(shop.id);
