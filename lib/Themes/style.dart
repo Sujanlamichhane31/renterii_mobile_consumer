@@ -8,7 +8,6 @@ final ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   secondaryHeaderColor: kMainTextColor,
   primaryColor: kMainColor,
-  primarySwatch: kMainSwatchColor,
   // checkboxTheme: CheckboxThemeData(
   //     checkColor: MaterialStateProperty.all(Colors.white),
   //     fillColor: MaterialStateProperty.all(kMainColor)),
@@ -20,20 +19,18 @@ final ThemeData appTheme = ThemeData(
   toggleableActiveColor: kMainColor,
   unselectedWidgetColor: Colors.black,
   bottomAppBarColor: kWhiteColor,
-  dividerColor: Color(0x1f000000),
+  dividerColor: const Color(0x1f000000),
   disabledColor: kDisabledColor,
-  buttonColor: kMainColor,
   cardColor: kCardBackgroundColor,
   hintColor: kLightTextColor,
   indicatorColor: kMainColor,
-  accentColor: kMainColor,
   bottomAppBarTheme: BottomAppBarTheme(color: kMainColor),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.normal,
     height: 33,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
+    padding: const EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
         side: BorderSide(color: kMainColor)),
     alignedDropdown: false,
     buttonColor: kMainColor,
@@ -46,7 +43,7 @@ final ThemeData appTheme = ThemeData(
   //text theme which contains all text styles
   textTheme: GoogleFonts.openSansTextTheme().copyWith(
     //text style of 'Delivering almost everything' at phone_number page
-    bodyText1: TextStyle(
+    bodyText1: const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 18.3,
     ),
@@ -65,7 +62,7 @@ final ThemeData appTheme = ThemeData(
     ),
 
     //text style of 'Got Delivered' at home page
-    headline4: TextStyle(
+    headline4: const TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.bold,
       fontSize: 16.7,
@@ -103,7 +100,7 @@ final ThemeData appTheme = ThemeData(
       color: kLightTextColor,
       fontSize: 15.0,
     ),
-  ),
+  ), colorScheme: ColorScheme.fromSwatch(primarySwatch: kMainSwatchColor).copyWith(secondary: kMainColor),
 );
 
 final ThemeData darkTheme = appTheme.copyWith(
@@ -112,20 +109,18 @@ final ThemeData darkTheme = appTheme.copyWith(
   unselectedWidgetColor: Colors.white,
   primaryColor: kMainColor,
   bottomAppBarColor: kMainTextColor,
-  dividerColor: Color(0x1f000000),
+  dividerColor: const Color(0x1f000000),
   disabledColor: kDisabledColor,
-  buttonColor: kMainColor,
-  cardColor: Color(0xff212321),
+  cardColor: const Color(0xff212321),
   hintColor: kLightTextColor,
   indicatorColor: kMainColor,
-  accentColor: kMainColor,
   bottomAppBarTheme: BottomAppBarTheme(color: kMainColor),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.normal,
     height: 33,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
+    padding: const EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
         side: BorderSide(color: kMainColor)),
     alignedDropdown: false,
     buttonColor: kMainColor,
@@ -134,11 +129,11 @@ final ThemeData darkTheme = appTheme.copyWith(
   appBarTheme: AppBarTheme(
       color: kTransparentColor,
       elevation: 0.0,
-      iconTheme: IconThemeData(color: Colors.white)),
+      iconTheme: const IconThemeData(color: Colors.white)),
   //text theme which contains all text styles
   textTheme: GoogleFonts.openSansTextTheme().copyWith(
     //text style of 'Delivering almost everything' at phone_number page
-    bodyText1: TextStyle(
+    bodyText1: const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 18.3,
     ),
@@ -157,7 +152,7 @@ final ThemeData darkTheme = appTheme.copyWith(
     ),
 
     //text style of 'Got Delivered' at home page
-    headline4: TextStyle(
+    headline4: const TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
       fontSize: 16.7,
@@ -177,7 +172,7 @@ final ThemeData darkTheme = appTheme.copyWith(
     ),
 
     //text entry text style
-    caption: TextStyle(
+    caption: const TextStyle(
       color: Colors.white,
       fontSize: 13.3,
     ),
@@ -185,7 +180,7 @@ final ThemeData darkTheme = appTheme.copyWith(
     overline: TextStyle(color: kLightTextColor, letterSpacing: 0.2),
 
     //text style of titles of card at home page
-    headline2: TextStyle(
+    headline2: const TextStyle(
       color: Colors.white,
       fontSize: 12.0,
       fontWeight: FontWeight.bold,
@@ -195,7 +190,7 @@ final ThemeData darkTheme = appTheme.copyWith(
       color: kLightTextColor,
       fontSize: 15.0,
     ),
-  ),
+  ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: kMainColor),
 );
 
 //text style of continue bottom bar

@@ -63,8 +63,15 @@ class AppRouter extends _i26.RootStackRouter {
           routeData: routeData, child: const _i2.VerificationScreen());
     },
     LocationScreenRoute.name: (routeData) {
+      final args = routeData.argsAs<LocationScreenRouteArgs>(
+          orElse: () => const LocationScreenRouteArgs());
       return _i26.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i3.LocationScreen());
+          routeData: routeData,
+          child: _i3.LocationScreen(
+              key: args.key,
+              textEditingController: args.textEditingController,
+              lat: args.lat,
+              long: args.long));
     },
     LoginScreenRoute.name: (routeData) {
       return _i26.MaterialPageX<dynamic>(
@@ -84,7 +91,7 @@ class AppRouter extends _i26.RootStackRouter {
     },
     SettingsScreenRoute.name: (routeData) {
       return _i26.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i8.SettingsScreen());
+          routeData: routeData, child: const _i8.SettingsScreen());
     },
     RatingScreenRoute.name: (routeData) {
       final args = routeData.argsAs<RatingScreenRouteArgs>();
@@ -127,7 +134,7 @@ class AppRouter extends _i26.RootStackRouter {
     },
     TermsAndConditionsScreenRoute.name: (routeData) {
       return _i26.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i14.TermsAndConditionsScreen());
+          routeData: routeData, child: const _i14.TermsAndConditionsScreen());
     },
     ShopsScreenRoute.name: (routeData) {
       final args = routeData.argsAs<ShopsScreenRouteArgs>();
@@ -192,7 +199,7 @@ class AppRouter extends _i26.RootStackRouter {
     },
     MyOrdersScreenRoute.name: (routeData) {
       return _i26.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i24.MyOrdersScreen());
+          routeData: routeData, child: const _i24.MyOrdersScreen());
     },
     ProfileScreenRoute.name: (routeData) {
       return _i26.MaterialPageX<dynamic>(
@@ -202,13 +209,11 @@ class AppRouter extends _i26.RootStackRouter {
 
   @override
   List<_i26.RouteConfig> get routes => [
-        _i26.RouteConfig('/#redirect',
-            path: '/', redirectTo: 'app', fullMatch: true),
         _i26.RouteConfig(RegisterScreenRoute.name, path: '/register-screen'),
         _i26.RouteConfig(VerificationScreenRoute.name,
             path: '/verification-screen'),
         _i26.RouteConfig(LocationScreenRoute.name, path: '/location-screen'),
-        _i26.RouteConfig(LoginScreenRoute.name, path: '/login-screen'),
+        _i26.RouteConfig(LoginScreenRoute.name, path: '/'),
         _i26.RouteConfig(AppRoute.name, path: 'app', children: [
           _i26.RouteConfig(HomeScreenRoute.name,
               path: '', parent: AppRoute.name),
@@ -279,18 +284,45 @@ class VerificationScreenRoute extends _i26.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.LocationScreen]
-class LocationScreenRoute extends _i26.PageRouteInfo<void> {
-  const LocationScreenRoute()
-      : super(LocationScreenRoute.name, path: '/location-screen');
+class LocationScreenRoute extends _i26.PageRouteInfo<LocationScreenRouteArgs> {
+  LocationScreenRoute(
+      {_i27.Key? key,
+      _i27.TextEditingController? textEditingController,
+      double? lat,
+      double? long})
+      : super(LocationScreenRoute.name,
+            path: '/location-screen',
+            args: LocationScreenRouteArgs(
+                key: key,
+                textEditingController: textEditingController,
+                lat: lat,
+                long: long));
 
   static const String name = 'LocationScreenRoute';
+}
+
+class LocationScreenRouteArgs {
+  const LocationScreenRouteArgs(
+      {this.key, this.textEditingController, this.lat, this.long});
+
+  final _i27.Key? key;
+
+  final _i27.TextEditingController? textEditingController;
+
+  final double? lat;
+
+  final double? long;
+
+  @override
+  String toString() {
+    return 'LocationScreenRouteArgs{key: $key, textEditingController: $textEditingController, lat: $lat, long: $long}';
+  }
 }
 
 /// generated route for
 /// [_i4.LoginScreen]
 class LoginScreenRoute extends _i26.PageRouteInfo<void> {
-  const LoginScreenRoute()
-      : super(LoginScreenRoute.name, path: '/login-screen');
+  const LoginScreenRoute() : super(LoginScreenRoute.name, path: '/');
 
   static const String name = 'LoginScreenRoute';
 }

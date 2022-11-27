@@ -123,10 +123,10 @@ class _ShopsScreenState extends State<ShopsScreen> {
               _clearSearch();
               Navigator.pop(context);
             },
-            icon: Icon(Icons.clear)),
+            icon: const Icon(Icons.clear)),
       ];
     } else {
-      return [IconButton(onPressed: _startSearching, icon: Icon(Icons.search))];
+      return [IconButton(onPressed: _startSearching, icon: const Icon(Icons.search))];
     }
   }
 
@@ -154,7 +154,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
   Widget _buildAppBarTitle() {
     return Text(
       widget.pageTitle,
-      style: TextStyle(),
+      style: const TextStyle(),
     );
   }
 
@@ -163,11 +163,11 @@ class _ShopsScreenState extends State<ShopsScreen> {
       autofocus: true,
       controller: _searchTextController,
       // cursorColor: MyColors.myGrey,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
           hintText: 'Find a shop...',
           border: InputBorder.none,
           hintStyle: TextStyle(fontSize: 18)),
-      style: TextStyle(fontSize: 18),
+      style: const TextStyle(fontSize: 18),
       onChanged: (searchedCharacter) {
         addSearchedForItemsToSearchedList(searchedCharacter);
       },

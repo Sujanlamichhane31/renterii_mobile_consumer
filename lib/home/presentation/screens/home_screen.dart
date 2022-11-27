@@ -1,11 +1,9 @@
+import 'dart:developer';
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-// import 'package:renterii/HomeOrderAccount/Home/Models/category.dart';
-// import 'package:renterii/HomeOrderAccount/Home/UI/Stores/stores.dart';
-// import 'package:renterii/Pages/items.dart';
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
@@ -14,8 +12,6 @@ import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
 import 'package:renterii/shops/presentation/screens/deals_screen.dart';
-
-import '../../../authentication/data/models/user.dart';
 import '../../../shared/utils/geolocator.dart';
 import '../widgets/booking_row.dart';
 
@@ -283,8 +279,8 @@ class _HomeState extends State<Home> {
             const SizedBox(
               height: 18,
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
+            const Padding(
+              padding: EdgeInsets.all(15.0),
               child: BookingRow(),
             ),
             Padding(
@@ -334,7 +330,7 @@ class _HomeState extends State<Home> {
             BlocBuilder<ShopCubit, ShopState>(
               builder: (context, state) {
                 if (state is ShopLoaded) {
-                  // print(state.shops[0]);
+                  // log(state.shops[0]);
                   aroundShops = state.shops
                       .where((shop) =>
                           getDistance(shop.lat, shop.lng) <= distanceBetween)
@@ -350,7 +346,7 @@ class _HomeState extends State<Home> {
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       children: aroundShops.map((shop) {
-                        print('Size: ${state.shops.length}');
+                        log('Size: ${state.shops.length}');
                         return FadedScaleAnimation(
                           child: quickGrid(
                             context: context,
@@ -441,7 +437,7 @@ class _HomeState extends State<Home> {
                       }
                     }
                   }
-                  // print(state.shops[0]);
+                  // log(state.shops[0]);
                   shops = state.shops
                       .where((shop) =>
                           getDistance(shop.lat, shop.lng) <= distanceBetween)
@@ -481,13 +477,13 @@ class _HomeState extends State<Home> {
       child: GestureDetector(
         onTap: () {
           dynamic ratingTotal = 0;
-          print(shop.rating.isNotEmpty);
+          log(shop.rating.isNotEmpty);
           if (shop.rating.isNotEmpty) {
             for (dynamic rating in shop.rating) {
               ratingTotal += rating['start'];
             }
           }
-          print(shop.rating);
+          log(shop.rating);
           context.router.push(ShopScreenRoute(
               rating: ratingTotal != 0
                   // ? (ratingTotal / shop.rating.length).toDouble() ?? 0
@@ -559,23 +555,23 @@ class _HomeState extends State<Home> {
                           if (address == null) {
                             return Container();
                           }
-                          print((address
-                              as Map<String, dynamic>)!['address_components']);
-                          print((address as Map<String, dynamic>)![
+                          log((address
+                              as Map<String, dynamic>)['address_components']);
+                          log((address as Map<String, dynamic>)[
                                   'address_components']
                               .toList()[0]['short_name']);
-                          if ((address as Map<String, dynamic>)![
+                          if ((address as Map<String, dynamic>)[
                                       'address_components']
                                   .toList()
                                   .length >
                               1) {
-                            print(">1");
-                            print((address as Map<String, dynamic>)![
+                            log(">1");
+                            log((address as Map<String, dynamic>)[
                                     'address_components']
                                 .toList());
                           } else {
-                            print("Normal");
-                            print((address as Map<String, dynamic>)![
+                            log("Normal");
+                            log((address as Map<String, dynamic>)[
                                     'address_components']
                                 .toList()[0]['short_name']);
                           }
@@ -583,7 +579,7 @@ class _HomeState extends State<Home> {
                             // width: double.infinity,
                             // width: MediaQuery.of(context).size.width*0.5,
                             child: Text(
-                              (address as Map<String, dynamic>)![
+                              (address as Map<String, dynamic>)[
                                       'address_components']
                                   .toList()[0]['short_name']
                                   .toString(),

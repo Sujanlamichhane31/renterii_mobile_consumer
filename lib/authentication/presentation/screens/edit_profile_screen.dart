@@ -55,7 +55,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             context.router.pop();
           } else if (state is UpdatingLocation) {
             context.router.push(
-              const LocationScreenRoute(),
+               LocationScreenRoute(),
             );
           } else if (state is SignupInfosFailure) {
             ScaffoldMessenger.of(context).showSnackBar(

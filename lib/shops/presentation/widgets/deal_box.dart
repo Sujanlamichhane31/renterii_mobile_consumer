@@ -1,7 +1,5 @@
 import 'package:animation_wrappers/animations/faded_scale_animation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Themes/colors.dart';
@@ -26,9 +24,9 @@ class _DealBoxState extends State<DealBox> {
   Widget build(BuildContext context) {
     
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7.0),
+      padding: const EdgeInsets.symmetric(vertical: 7.0),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(vertical: 5),
         color: Theme.of(context).scaffoldBackgroundColor,
         child: ListTile(
           title: Text(
@@ -68,7 +66,7 @@ class _DealBoxState extends State<DealBox> {
                             fontWeight: FontWeight.bold,
                             color: kMainColor)),
                   ),
-                  fadeDuration: Duration(milliseconds: 800),
+                  fadeDuration: const Duration(milliseconds: 800),
                 ),
               ],
             ),
