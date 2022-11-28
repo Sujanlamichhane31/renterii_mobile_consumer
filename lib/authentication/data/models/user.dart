@@ -112,6 +112,7 @@ class CurrentUser extends Equatable {
     dynamic? transactions,
     DocumentReference? firestoreDocReference,
     String? description,
+    String? category,
   }) {
     return CurrentUser(
       id: id ?? this.id,
@@ -139,7 +140,7 @@ class CurrentUser extends Equatable {
 
   @override
   String toString() {
-    return 'CurrentUser{id: $id, name: $name, email: $email, imageUrl: $photoUrl, '
+    return 'CurrentUser{id: $id, name: $name, email: $email, category:$category, imageUrl: $photoUrl, '
         'phoneNumber: $phoneNumber, address: $address, addressType: $addressType, '
         'latitude: $latitude, longitude: $longitude, walletBalance: $walletBalance, '
         'transactions: $transactions}';
@@ -153,6 +154,7 @@ class CurrentUser extends Equatable {
         photoUrl,
         description,
         phoneNumber,
+        category,
         address,
         addressType,
         latitude,

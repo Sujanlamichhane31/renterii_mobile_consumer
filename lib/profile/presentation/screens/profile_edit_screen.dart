@@ -8,6 +8,7 @@ import 'package:renterii/authentication/business_logic/cubit/signup/signup_cubit
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/authentication/presentation/screens/location_screen.dart';
 import 'package:renterii/authentication/presentation/widgets/image_upload.dart';
+import 'package:renterii/authentication/presentation/widgets/profile_image.dart';
 import 'package:renterii/authentication/presentation/widgets/register_text_field.dart';
 import 'package:renterii/rentals/presentation/screens/shops_map_screen.dart';
 import 'package:renterii/routes/app_router.gr.dart';
@@ -88,11 +89,13 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         child: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             final user = state.user;
-
+            lat = user.latitude ?? 0.0;
+            long = user.longitude ?? 0.0;
             _nameController.text = user.name ?? '';
             _emailController.text = user.email ?? '';
             _phoneNumberController.text = user.phoneNumber ?? '';
             _addressController.text = user.address ?? '';
+            _choosenCategory = user.category ?? '-1';
             _descriptionEditingController.text = user.description ?? '';
             return Form(
               key: profileEditKey,
@@ -122,7 +125,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         height: 16,
                       ),
 
-                      ImageUpload(
+                      ProfileImage(
                           imageUrl: user.photoUrl,
                           onSetImage: (File image) {
                             context
@@ -223,7 +226,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                 value: _choosenCategory,
                                 dropdownColor: Colors.grey[400]!,
                                 validator: ((value) {
-                                  if (_choosenCategory == null) {
+                                  if (_choosenCategory == null &&
+                                      _choosenCategory == "-1") {
                                     return 'Please select category';
                                   } else {
                                     return null;
@@ -236,9 +240,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   );
                                 }).toList(),
                                 onChanged: (String? value) {
-                                  setState(() {
-                                    _choosenCategory = value;
-                                  });
+                                  _choosenCategory = value;
                                 }),
                             const SizedBox(
                               height: 15,
@@ -408,6 +410,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                         _descriptionEditingController.text,
                                     latitude: lat,
                                     longitude: long,
+                                    category: _choosenCategory,
                                   );
                               if (_phoneNumberController.text != '') {
                                 // TODO: Verify phoneNumber

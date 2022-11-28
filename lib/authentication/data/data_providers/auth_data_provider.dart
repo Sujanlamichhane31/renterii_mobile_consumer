@@ -196,7 +196,7 @@ class AuthDataProvider {
         'address': address ?? '',
         'latitude': latitude ?? 0.0,
         'longitude': longitude ?? 0.0,
-        'category': category ?? 0.0,
+        'category': category ?? '-1',
       });
 
       // if (name != null) {

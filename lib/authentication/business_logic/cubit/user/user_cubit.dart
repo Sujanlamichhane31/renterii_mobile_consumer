@@ -252,6 +252,8 @@ class UserCubit extends HydratedCubit<UserState> {
           addressType: addressType ?? user.addressType,
           latitude: latitude ?? user.latitude,
           longitude: longitude ?? user.longitude,
+          category: category ?? user.category,
+          description: description ?? user.description,
         ),
       ),
     );
@@ -288,6 +290,8 @@ class UserCubit extends HydratedCubit<UserState> {
           walletBalance: userProfileData['walletBalance'],
           firestoreDocReference: data['docReference'],
           transactions: transactions,
+          category: userProfileData['category'],
+          description: userProfileData['description'],
         ),
       ),
     );
