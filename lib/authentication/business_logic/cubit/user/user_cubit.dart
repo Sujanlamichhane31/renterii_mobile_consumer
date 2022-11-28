@@ -239,15 +239,16 @@ class UserCubit extends HydratedCubit<UserState> {
     emit(
       state.copyWith(
         user: state.user.copyWith(
-          name: name ?? user.name,
-          email: email ?? user.email,
-          phoneNumber: phoneNumber ?? user.phoneNumber,
-          photoUrl: photoUrl ?? user.photoUrl,
-          address: address ?? user.address,
-          addressType: addressType ?? user.addressType,
-          latitude: latitude ?? user.latitude,
-          longitude: longitude ?? user.longitude,
-        ),
+            name: name ?? user.name,
+            email: email ?? user.email,
+            phoneNumber: phoneNumber ?? user.phoneNumber,
+            photoUrl: photoUrl ?? user.photoUrl,
+            address: address ?? user.address,
+            addressType: addressType ?? user.addressType,
+            latitude: latitude ?? user.latitude,
+            longitude: longitude ?? user.longitude,
+            description: description,
+            category: category),
       ),
     );
   }
@@ -283,6 +284,8 @@ class UserCubit extends HydratedCubit<UserState> {
           walletBalance: userProfileData['walletBalance'],
           firestoreDocReference: data['docReference'],
           transactions: transactions,
+          description: userProfileData['description'],
+          category: userProfileData['category'],
         ),
       ),
     );

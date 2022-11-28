@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
 
   List<Shop> shops = <Shop>[];
   List<Shop> aroundShops = <Shop>[];
-  double distanceBetween = 300.0;
+  double distanceBetween = 30000.0;
   @override
   void initState() {
     // BlocProvider.of<ShopCubit>(context).getAllShops();
@@ -557,8 +557,8 @@ class _HomeState extends State<Home> {
                           }
                           log((address
                               as Map<String, dynamic>)['address_components']);
-                          log((address as Map<String, dynamic>)[
-                                  'address_components']
+                          log((address
+                                  as Map<String, dynamic>)['address_components']
                               .toList()[0]['short_name']);
                           if ((address as Map<String, dynamic>)[
                                       'address_components']

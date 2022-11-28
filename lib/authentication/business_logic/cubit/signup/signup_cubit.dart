@@ -50,6 +50,11 @@ class SignupCubit extends Cubit<SignupState> {
         email: email,
         phoneNumber: phoneNumber,
         photoUrl: photoUrl,
+        address: address,
+        description: description,
+        category: category,
+        latitude: latitude,
+        longitude: longitude,
       );
       emit(SignupInfosSuccess());
     } catch (error) {
