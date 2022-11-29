@@ -19,24 +19,23 @@ class ProductRepository {
         Map<String, dynamic> docData =
             docSnapshot.data() as Map<String, dynamic>;
         DocumentReference data = docData['shop'];
-        log(data.id);
         if (data.id == id) {
           allProducts.add(Product(
               id: docSnapshot.id,
               ref: docSnapshot.reference,
               title: docData['listingName'] ?? '',
-              price: docData['price'] ?? 0.0,
+              price: docData['rentalPrice'] ?? 0.0,
               imageUrl: docData['imageUrl'] ?? '',
               category: docData['listingCategory'] ?? '',
-              rentDuration: docData['rentDuration'] ?? 1,
+              rentalDuration: docData['rentalDuration'] ?? '',
               pickup: docData['pickup'] ?? -1,
               rentalFor: docData['rentalFor'] ?? '',
               typeOfRental: docData['typeOfRental'] ?? '',
               description: docData['description'] ?? '',
+              rentingRules: docData['rentalRules'] ?? '',
               shop: docData['shop']));
         }
       }
-      log("all products: ${allProducts.length}");
       return allProducts;
     } catch (error) {
       rethrow;

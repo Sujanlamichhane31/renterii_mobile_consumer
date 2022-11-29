@@ -10,7 +10,7 @@ class Product {
       required this.price,
       required this.imageUrl,
       required this.category,
-      required this.rentDuration,
+      required this.rentalDuration,
       this.shop,
       this.pickup,
       this.typeOfRental,
@@ -24,7 +24,7 @@ class Product {
   final String imageUrl;
   final String category;
   final DocumentReference? ref;
-  final int rentDuration;
+  final String rentalDuration;
   Double? rentalPrice;
   final DocumentReference? shop;
   final int? pickup;

@@ -9,6 +9,7 @@ import 'package:renterii/orders/data/models/order.dart';
 import 'package:renterii/rentals/presentation/widgets/bottom_bar.dart';
 import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/shops/data/models/product.dart';
+import 'package:renterii/utils/constant.dart';
 
 class Method {
   final String image;
@@ -48,7 +49,7 @@ class _BottomState extends State<Bottom> {
 
   @override
   void initState() {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 30; i++) {
       dateReach.add(Reach(
         DateFormat('MMMd').format(_dateTime.add(Duration(days: i))),
       ));
@@ -64,28 +65,17 @@ class _BottomState extends State<Bottom> {
   @override
   Widget build(BuildContext context) {
     print('dateReach: ${dateReach[1].title}');
-    final List<Method> method = [
-      Method('images/Group 473.png', "Pay + Pickup", '+\$2.50'),
-      Method('images/Group 473.png', "Delivery At Spot", '+\$2.50'),
-    ];
-    OrderProduct newOrder;
 
-    final List<Reach> reach = [
-      Reach("1 Person"),
-      Reach("2 Persons"),
-      Reach("3 Persons"),
-      Reach("4 Persons"),
-      Reach("5 Persons"),
-    ];
+    OrderProduct newOrder;
 
     return ListView(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         children: <Widget>[
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           Row(children: [
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text(
@@ -96,7 +86,7 @@ class _BottomState extends State<Bottom> {
                   .copyWith(fontWeight: FontWeight.bold, fontSize: 14.0),
             )
           ]),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(
@@ -160,13 +150,13 @@ class _BottomState extends State<Bottom> {
                         );
                       }),
                 ),
-                fadeDuration: Duration(milliseconds: 800),
+                fadeDuration: const Duration(milliseconds: 800),
               ),
             ],
           ),
           const SizedBox(height: 25),
           Row(children: [
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Text(
               "Renters",
               style: Theme.of(context)
@@ -179,10 +169,10 @@ class _BottomState extends State<Bottom> {
           FadedScaleAnimation(
             child: Container(
               height: 38.0,
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: reach.length,
                   itemBuilder: (context, index) {
@@ -193,7 +183,7 @@ class _BottomState extends State<Bottom> {
                         });
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Container(
                             height: 35,
                             width: 82,
@@ -203,7 +193,7 @@ class _BottomState extends State<Bottom> {
                                       ? kMainColor
                                       : Colors.white),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               color: personIndex == index
                                   ? kMainColor
                                   : Colors.white,
@@ -221,7 +211,7 @@ class _BottomState extends State<Bottom> {
                     );
                   }),
             ),
-            fadeDuration: Duration(milliseconds: 800),
+            fadeDuration: const Duration(milliseconds: 800),
           ),
           const SizedBox(height: 25),
           Row(children: [
@@ -237,10 +227,10 @@ class _BottomState extends State<Bottom> {
           FadedScaleAnimation(
             child: Container(
               height: 38.0,
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: dateReach.length,
                   itemBuilder: (context, index) {
@@ -251,7 +241,7 @@ class _BottomState extends State<Bottom> {
                         });
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Container(
                             height: 35,
                             width: 82,
@@ -261,7 +251,7 @@ class _BottomState extends State<Bottom> {
                                       ? kMainColor
                                       : Colors.white),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               color: dateIndex == index
                                   ? kMainColor
                                   : Colors.white,
@@ -279,11 +269,11 @@ class _BottomState extends State<Bottom> {
                     );
                   }),
             ),
-            fadeDuration: Duration(milliseconds: 800),
+            fadeDuration: const Duration(milliseconds: 800),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(children: [
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Text(
               "Time",
               style: Theme.of(context)
@@ -295,10 +285,10 @@ class _BottomState extends State<Bottom> {
           FadedScaleAnimation(
             child: Container(
               height: 38.0,
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: timeReach.length,
                   itemBuilder: (context, index) {
@@ -319,7 +309,7 @@ class _BottomState extends State<Bottom> {
                                       ? kMainColor
                                       : Colors.white),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               color: timeIndex == index
                                   ? kMainColor
                                   : Colors.white,
@@ -338,7 +328,7 @@ class _BottomState extends State<Bottom> {
                     );
                   }),
             ),
-            fadeDuration: Duration(milliseconds: 800),
+            fadeDuration: const Duration(milliseconds: 800),
           ),
           const SizedBox(height: 20),
           BlocListener<OrderCubit, OrderState>(
@@ -346,7 +336,7 @@ class _BottomState extends State<Bottom> {
                 currState.status == OrderStatus.newOrderInProgress,
             listener: (context, state) {
               print('choose order: ${state.orderInProgress}');
-             // context.router.push(const ConfirmOrderScreenRoute());
+              context.router.push(const ConfirmOrderScreenRoute());
             },
             child: BottomBar(
               text: 'Confirm',

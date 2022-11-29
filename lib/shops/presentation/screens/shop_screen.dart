@@ -29,12 +29,12 @@ class ShopScreen extends StatefulWidget {
   final double? long;
   final String? description;
   final bool isBooking;
-  final dynamic? reference;
+  dynamic? reference;
   final String rating;
   final int ratingNumber;
   final dynamic ratingArray;
 
-  const ShopScreen({
+  ShopScreen({
     required this.id,
     Key? key,
     this.name,
@@ -65,7 +65,7 @@ class _ShopScreenState extends State<ShopScreen> {
       description: '',
       id: '',
       category: '',
-      rentDuration: 1);
+      rentalDuration: '');
   double distanceInMeters = 0;
   String rentDuration = '';
 
@@ -272,6 +272,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 body: BlocBuilder<ProductCubit, ProductState>(
                     builder: (context, state) {
                   if (state is ProductLoaded) {
+                    widget.reference = state.products.first.shop;
                     for (var items in state.products) {
                       if (items.category.toLowerCase() == 'item' ||
                           items.category.toLowerCase() == 'items') {
@@ -290,11 +291,19 @@ class _ShopScreenState extends State<ShopScreen> {
                   return TabBarView(
                     physics: const BouncingScrollPhysics(),
                     children: [
-                      ProductItemWidget(productList: itemList),
-                      ProductItemWidget(productList: spacesList),
-                      ProductItemWidget(productList: lodgingList),
-                      ProductItemWidget(productList: experienceList),
-                      ProductItemWidget(productList: packagesList),
+                      ProductItemWidget(
+                          productList: itemList, reference: widget.reference),
+                      ProductItemWidget(
+                          productList: spacesList, reference: widget.reference),
+                      ProductItemWidget(
+                          productList: lodgingList,
+                          reference: widget.reference),
+                      ProductItemWidget(
+                          productList: experienceList,
+                          reference: widget.reference),
+                      ProductItemWidget(
+                          productList: packagesList,
+                          reference: widget.reference),
                     ],
                   );
                 })
@@ -523,7 +532,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       description: '',
       id: '',
       category: '',
-      rentDuration: 1);
+      rentalDuration: '');
 
   double distanceInMeters = 0;
 
@@ -537,16 +546,18 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       itemCount: widget.productList.length,
       itemBuilder: (context, int index) {
         return ListTile(
-          leading: FadedScaleAnimation(
-            //child: Image.asset('images/Food images/2.png', scale: 3,),
-            child: Image.network(
-              widget.productList[index].imageUrl,
-              scale: 3,
+          leading: Container(
+            height: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: FadedScaleAnimation(
+              child: Image.network(
+                widget.productList[index].imageUrl,
+                scale: 3,
+              ),
+              fadeDuration: const Duration(milliseconds: 800),
             ),
-            fadeDuration: const Duration(milliseconds: 800),
           ),
-          title: Text(
-              '${widget.productList[index].title} ({${widget.productList}[index]})',
+          title: Text(widget.productList[index].title,
               //AppLocalizations.of(context)!.sandwich!,
               style: Theme.of(context)
                   .textTheme
@@ -554,24 +565,37 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                   .copyWith(fontSize: 15, fontWeight: FontWeight.w600)),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FadedScaleAnimation(
-                  child: Image.asset(
-                    'images/ic_pink.png',
-                    height: 16.0,
-                    width: 16.7,
-                  ),
-                  fadeDuration: const Duration(milliseconds: 800),
+                Row(
+                  children: [
+                    FadedScaleAnimation(
+                      child: Image.asset(
+                        'images/ic_pink.png',
+                        height: 16.0,
+                        width: 16.7,
+                      ),
+                      fadeDuration: const Duration(milliseconds: 800),
+                    ),
+                    const SizedBox(
+                      width: 8.0,
+                    ),
+                    Text(widget.productList[index].rentalDuration,
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption!
+                            .copyWith(fontSize: 14)),
+                  ],
                 ),
                 const SizedBox(
-                  width: 8.0,
+                  height: 5.0,
                 ),
-                Text('\$ ${widget.productList[index].price.toString()}',
+                Text('\$ ${widget.productList[index].price}',
                     style: Theme.of(context)
                         .textTheme
                         .caption!
-                        .copyWith(fontSize: 15)),
+                        .copyWith(fontSize: 14)),
               ],
             ),
           ),
@@ -597,7 +621,8 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                             return Container(
                               color: const Color(0xfff8f9fd),
                               child: Bottom(
-                                  product: product, ref: widget.reference),
+                                  product: widget.productList[index],
+                                  ref: widget.reference),
                             );
                           },
                         );

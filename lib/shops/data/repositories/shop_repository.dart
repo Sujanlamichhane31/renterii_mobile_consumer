@@ -26,7 +26,6 @@ class ShopRepository {
                 (await (rate['userId'] as DocumentReference).get()).data();
             if (rateResp != null) {
               dynamic rateData = rateResp as Map<String, dynamic>;
-              print(rateData);
               rate['username'] = rateData['name'];
             }
           }
@@ -47,7 +46,6 @@ class ShopRepository {
             categoryName: categoryData['name'],
             rating: docData['rating'] ?? ''));
       }
-      print('shop: ${allShops[0]}');
       return allShops;
     } catch (error) {
       rethrow;

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:renterii/shops/data/models/product.dart';
 
 class Order extends Equatable {
   Timestamp? createdAt;
@@ -70,7 +71,7 @@ class Order extends Equatable {
 }
 
 class OrderProduct extends Equatable {
-  dynamic product;
+  Product product;
   int quantity;
   dynamic nbrPersons;
   String? note;
