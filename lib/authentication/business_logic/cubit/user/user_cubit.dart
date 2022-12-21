@@ -173,7 +173,15 @@ class UserCubit extends HydratedCubit<UserState> {
       );
 
       if (!userData['isNewUser']) {
-        _fetchUserProfile();
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString("userId", "${state.user.id}");
+
+        fetchUserProfile();
+      } else {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString("userId", "${state.user.id}");
       }
     } catch (error, stackTrace) {
       log('VERIFY OTP ERROR $error');
@@ -212,7 +220,14 @@ class UserCubit extends HydratedCubit<UserState> {
       );
 
       if (!isNewUser) {
-        _fetchUserProfile();
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString("userId", "${state.user.id}");
+        fetchUserProfile();
+      } else {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString("userId", "${state.user.id}");
       }
     } catch (error, s) {
       log("$error");
@@ -252,26 +267,33 @@ class UserCubit extends HydratedCubit<UserState> {
           addressType: addressType ?? user.addressType,
           latitude: latitude ?? user.latitude,
           longitude: longitude ?? user.longitude,
+          category: category ?? user.category,
+          description: description ?? user.description,
         ),
       ),
     );
   }
 
-  Future<void> _fetchUserProfile() async {
+  Future<void> fetchUserProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final id = sharedPreferences.getString("userId");
     final data = await _authRepository.fetchUserProfile(
-      userId: state.user.id,
+      userId: state.user.id.isEmpty ? id! : state.user.id,
     );
 
     final userProfileData = data['docData'];
     final List<UserTransaction> transactions = [];
-
-    log('DATA_TRANSACTION ${userProfileData['transaction']}');
+    double wallet = 0.0;
+    log('DATA_TRANSACTION ${userProfileData.toString()}');
     log('DATA_WALLET_BALANCE ${userProfileData['walletBalance']}');
 
     if (userProfileData['transaction'] != null) {
       for (dynamic transaction in userProfileData['transaction']) {
         transactions.add(UserTransaction.fromMap(transaction));
       }
+    }
+    if (userProfileData['walletBalance'] is int) {
+      wallet = userProfileData['walletBalance'].toDouble();
     }
 
     emit(
@@ -285,9 +307,11 @@ class UserCubit extends HydratedCubit<UserState> {
           addressType: userProfileData['addressType'],
           latitude: userProfileData['latitude'],
           longitude: userProfileData['longitude'],
-          walletBalance: userProfileData['walletBalance'],
+          walletBalance: wallet,
           firestoreDocReference: data['docReference'],
           transactions: transactions,
+          category: userProfileData['category'],
+          description: userProfileData['description'],
         ),
       ),
     );

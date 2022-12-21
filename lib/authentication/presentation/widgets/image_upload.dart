@@ -94,10 +94,10 @@ class _ImageUploadState extends State<ImageUpload> {
             },
       child: Builder(builder: (context) {
         dynamic backgroundImage;
-        if (widget.imageUrl != null) {
+        if (widget.imageUrl != null && widget.imageUrl!.trim().isNotEmpty) {
           backgroundImage = NetworkImage(widget.imageUrl!);
         } else {
-          backgroundImage = null;
+          backgroundImage = AssetImage("images/account/profile_icon.png");
         }
 
         if (image != null) {

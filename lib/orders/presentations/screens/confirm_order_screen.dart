@@ -33,7 +33,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
 
   double discountDecimalPercentage = 0.0;
   double discountAmount = 0.0;
-
+  double walletBalance = 0.0;
   double get totalAmount {
     if (discountDecimalPercentage == 0.0) {
       return double.parse(total.toStringAsFixed(1));
@@ -49,6 +49,8 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    walletBalance = context.read<UserCubit>().state.user.walletBalance ?? 0.0;
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -85,6 +87,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
         },
         child: FadedSlideAnimation(
           child: BlocBuilder<OrderCubit, OrderState>(builder: (context, state) {
+            final userAddress = context.read<UserCubit>().state.user.address;
             if (state.orderInProgress != null) {
               subTotal = 0;
 
@@ -121,8 +124,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                               itemCount: state.orderInProgress!.products.length,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                log(
-                                    'PRODUCTS ${state.orderInProgress!.products}');
+                                log('PRODUCTS ${state.orderInProgress!.products}');
                                 return Column(
                                   children: [
                                     cartOrderItemListTile(
@@ -195,8 +197,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                                       .toStringAsFixed(1),
                                 );
 
-                                log(
-                                    'total amound: $discountDecimalPercentage');
+                                log('total amound: $discountDecimalPercentage');
                               } else {
                                 discountAmount = 0.0;
                               }
@@ -421,14 +422,14 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                                             .copyWith(
                                                 color: kDisabledColor,
                                                 fontWeight: FontWeight.bold)),
-                                    Text(
-                                        AppLocalizations.of(context)!.homeText!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption!
-                                            .copyWith(
-                                                color: kMainColor,
-                                                fontWeight: FontWeight.bold)),
+                                    // Text(
+                                    //     AppLocalizations.of(context)!.homeText!,
+                                    //     style: Theme.of(context)
+                                    //         .textTheme
+                                    //         .caption!
+                                    //         .copyWith(
+                                    //             color: kMainColor,
+                                    //             fontWeight: FontWeight.bold)),
                                     const Spacer(),
                                   ],
                                 ),
@@ -436,7 +437,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                                   height: 13.0,
                                 ),
                                 Text(
-                                  '1024, Central Residency Hemilton Park, New York, USA',
+                                  userAddress ?? '',
                                   style: Theme.of(context)
                                       .textTheme
                                       .caption!
@@ -463,12 +464,7 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                                   return BottomSheet(
                                       onClosing: () {},
                                       builder: (ctx) {
-                                        final walletBalance = context
-                                            .read<UserCubit>()
-                                            .state
-                                            .user
-                                            .walletBalance;
-
+                                        log("k vayo: $walletBalance");
                                         return Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
@@ -565,12 +561,12 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
     OrderProduct orderProduct,
     BuildContext context,
   ) {
-    if (orderProduct.product.rentDuration > 1) {
-      rentDuration = '${orderProduct.product.rentDuration} hours';
+    if (orderProduct.product.rentalDuration.isNotEmpty) {
+      rentDuration = '${orderProduct.product.rentalDuration}';
     } else {
-      rentDuration = '${orderProduct.product.rentDuration} hour';
+      rentDuration = '${orderProduct.product.rentalDuration}';
     }
-    log('order product: $orderProduct');
+    log('order product: ${orderProduct.product.toString()}');
     return Column(
       children: <Widget>[
         ListTile(

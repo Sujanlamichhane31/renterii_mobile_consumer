@@ -9,12 +9,13 @@ class ProductCubit extends Cubit<ProductState> {
   final ProductRepository _productRepository;
   ProductCubit({
     required ProductRepository productRepository,
-  })  :_productRepository = productRepository,
+  })  : _productRepository = productRepository,
         super(ProductInitial());
 
-  Future<void> getAllProducts(String id) async{
+  Future<void> getAllProducts(String id) async {
     emit(ProductLoading());
-    final List<Product> allProducts = await _productRepository.getShopProducts(id);
+    final List<Product> allProducts =
+        await _productRepository.getShopProducts(id);
     emit(ProductLoaded(products: allProducts));
   }
 }
