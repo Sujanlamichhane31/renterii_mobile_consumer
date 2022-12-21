@@ -9,7 +9,6 @@ import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/theme_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/mobile_input.dart';
 
@@ -34,10 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
             context.router.replace(RegisterScreenRoute());
           } else if (state.status == UserStatus.loginGoogleSuccess &&
               !state.isNewUser) {
-            log("messagedddd");
             context.router.replaceNamed('app');
           } else if (state.status == UserStatus.loginOtpSent) {
-            log("jndjnjpnmdmnojdnojd");
             context.router.push(
               const VerificationScreenRoute(),
             );

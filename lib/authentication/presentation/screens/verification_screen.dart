@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:renterii/Locale/locales.dart';
+import 'package:renterii/app.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/routes/app_router.gr.dart';
 
@@ -96,7 +97,7 @@ class _OtpVerifyState extends State<OtpVerify> {
       listener: (context, state) {
         if (state.status == UserStatus.loginSuccess &&
             state.isNewUser == false) {
-          context.router.replaceNamed('app');
+          context.router.pushAndPopUntil(const AppRoute(), predicate: (_)=>false);
         } else if (state.status == UserStatus.loginSuccess &&
             state.isNewUser == true) {
           context.router.replace(RegisterScreenRoute());
