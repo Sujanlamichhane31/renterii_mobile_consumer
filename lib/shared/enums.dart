@@ -1,0 +1,1 @@
+enum PossiblePaymentMethods { wallet, creditCard }
