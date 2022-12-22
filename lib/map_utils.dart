@@ -15,7 +15,7 @@ List<String> stops = [
 ];
 
 const CameraPosition kGooglePlex = CameraPosition(
-  target: LatLng(45.344643, -75.769676),
+  target: LatLng(43.635310, -79.402080),
   zoom: 15,
 );
 
@@ -76,3 +76,6 @@ class MapUtils {
     return fi.image;
   }
 }
+
+String address = "637 Lakeshore Blvd West Toronto Ontario ";
+LatLng lakeshore = LatLng(43.635310, -79.402080);

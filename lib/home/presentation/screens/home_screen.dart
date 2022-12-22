@@ -176,7 +176,8 @@ class _HomeState extends State<Home> {
                                 context.router.push(ShopsScreenRoute(
                                     pageTitle: e.name,
                                     isBooking: false,
-                                    categoryId: e.id!));
+                                    categoryId: e.id!)
+                                    );
                               },
                             );
                           })

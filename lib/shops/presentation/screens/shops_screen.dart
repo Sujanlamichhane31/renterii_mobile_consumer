@@ -36,7 +36,11 @@ class _ShopsScreenState extends State<ShopsScreen> {
 
   @override
   void initState() {
-    widget.pageTitle == 'Near me' ? allShop() : shopByCategory();
+    if (widget.pageTitle == 'Near me') {
+      allShop();
+    } else {
+      shopByCategory();
+    }
     super.initState();
   }
 
@@ -80,16 +84,13 @@ class _ShopsScreenState extends State<ShopsScreen> {
               return _buildShopsList(_searchTextController.text.isEmpty
                   ? allShops
                   : filteredShops);
-            }
-            if (state is ShopsByCategoryLoaded) {
+            } else if (state is ShopsByCategoryLoaded) {
               allShops = state.shops;
               print('shops by category: $allShops');
               return _buildShopsList(_searchTextController.text.isEmpty
                   ? allShops
                   : filteredShops);
-            }
-
-            if (state is ShopsLoading) {
+            } else if (state is ShopsLoading) {
               print('shop by category spinner: $allShops');
               return const Center(
                 child: CircularProgressIndicator(),
