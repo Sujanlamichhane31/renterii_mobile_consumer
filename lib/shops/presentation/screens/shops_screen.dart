@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
+import 'package:renterii/utils/constant.dart';
 
 import '../../../routes/app_router.gr.dart';
 import '../../data/models/shop.dart';
@@ -36,11 +37,14 @@ class _ShopsScreenState extends State<ShopsScreen> {
 
   @override
   void initState() {
-    if (widget.pageTitle == 'Near me') {
-      allShop();
-    } else {
-      shopByCategory();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.pageTitle == nearMe) {
+        allShop();
+      } else {
+        shopByCategory();
+      }
+    });
+
     super.initState();
   }
 
@@ -80,18 +84,15 @@ class _ShopsScreenState extends State<ShopsScreen> {
           builder: (context, state) {
             if (state is ShopLoaded) {
               allShops = state.shops;
-              print('shops by category: $allShops');
               return _buildShopsList(_searchTextController.text.isEmpty
                   ? allShops
                   : filteredShops);
             } else if (state is ShopsByCategoryLoaded) {
               allShops = state.shops;
-              print('shops by category: $allShops');
               return _buildShopsList(_searchTextController.text.isEmpty
                   ? allShops
                   : filteredShops);
             } else if (state is ShopsLoading) {
-              print('shop by category spinner: $allShops');
               return const Center(
                 child: CircularProgressIndicator(),
               );
@@ -99,7 +100,6 @@ class _ShopsScreenState extends State<ShopsScreen> {
               return _buildShopsList(_searchTextController.text.isEmpty
                   ? allShops
                   : filteredShops);
-              ;
             }
           },
         ),

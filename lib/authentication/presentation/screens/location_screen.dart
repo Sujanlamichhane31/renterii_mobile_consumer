@@ -1,23 +1,24 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:ui' as ui;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:renterii/Locale/locales.dart';
 import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
-// import 'package:renterii/authentication/business_logic/cubit/order_bloc.dart';
-// import 'package:renterii/authentication/business_logic/cubit/order_state.dart';
 import 'package:renterii/authentication/presentation/widgets/bottom_bar.dart';
 import 'package:renterii/authentication/presentation/widgets/custom_appbar.dart';
 import 'package:renterii/map_utils.dart';
 import 'package:renterii/rentals/business_logic/cubit/order_bloc.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
+import 'package:renterii/utils/location_access.dart';
 import '../../../shared/map/business_logic/map_bloc.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -50,19 +51,19 @@ class LocationScreen extends StatelessWidget implements AutoRouteWrapper {
         long: long,
       ),
     );
-    return const SetLocation();
+    return SetLocation();
   }
 }
 
 class SetLocation extends StatefulWidget {
-  const SetLocation(
+  SetLocation(
       {this.textEditingController,
       this.isFromStoreProfile = false,
       this.lat,
       this.long});
   final bool? isFromStoreProfile;
-  final double? lat;
-  final double? long;
+  double? lat;
+  double? long;
   final TextEditingController? textEditingController;
   @override
   _SetLocationState createState() => _SetLocationState();
@@ -76,10 +77,13 @@ class _SetLocationState extends State<SetLocation> {
   Set<Marker> _markers = {};
   String address = '';
   late LatLng latLng;
+  LatLng _currentCoordinate = LocationAccess().currentCoordinate;
 
   @override
   void initState() {
     super.initState();
+    customMarker();
+    currentLocation();
   }
 
   Future<LatLng> getCenter() async {
@@ -98,8 +102,40 @@ class _SetLocationState extends State<SetLocation> {
 
   List<Marker> markerList = [];
 
+  currentLocation() async {
+    await LocationAccess().requestLocationPermission();
+    final status = await Permission.locationWhenInUse.request();
+    address = await LocationAccess().getCurrentLocation();
+    widget.textEditingController!.text = address;
+    _currentCoordinate = await LocationAccess().getCurrentLatLng();
+    widget.lat = _currentCoordinate.latitude;
+    widget.long = _currentCoordinate.longitude;
+    customMarker();
+  }
+
+  customMarker() async {
+    Future<Uint8List> getBytesFromAsset(String path, int width) async {
+      ByteData data = await rootBundle.load(path);
+      ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+          targetWidth: width);
+      ui.FrameInfo fi = await codec.getNextFrame();
+      return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+    }
+
+    final Uint8List markerbitmap =
+        await getBytesFromAsset('images/logo_marker.png', 90);
+    widget.lat = _currentCoordinate.latitude;
+    widget.long = _currentCoordinate.longitude;
+    markerList.add(Marker(
+        markerId: const MarkerId("current address"),
+        icon: BitmapDescriptor.fromBytes(markerbitmap),
+        position:
+            LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
+  }
+
   addMarker(List<Shop> result) {
-    markerList.clear();
     for (var index = 0; index < result.length; index++) {
       log("result: ${result[index].title},${result[index].address}");
       if (result[index].lat != 0.0 && result[index].lng != 0.0) {
@@ -114,9 +150,7 @@ class _SetLocationState extends State<SetLocation> {
         log("latitude: ${result[index].lat}");
       }
     }
-    for (var i in markerList) {
-      log('marker: ${i.position.latitude}}');
-    }
+    customMarker();
     return markerList;
   }
 
@@ -191,7 +225,7 @@ class _SetLocationState extends State<SetLocation> {
               var newlatlang = LatLng(_lat!, _lang!);
               //move map camera to selected place with animation
               mapStyleController?.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(target: newlatlang, zoom: 17)));
+                  CameraPosition(target: newlatlang, zoom: 15)));
             }
           },
           hint: AppLocalizations.of(context)!.enterLocation,
@@ -218,6 +252,7 @@ class _SetLocationState extends State<SetLocation> {
                           : CameraPosition(
                               target: LatLng(widget.lat!, widget.long!),
                               zoom: 15),
+                      zoomControlsEnabled: false,
                       onMapCreated: (controller) {
                         //method called when map is created
                         setState(() {
@@ -231,8 +266,9 @@ class _SetLocationState extends State<SetLocation> {
                         //when map drag stops
                         List<Placemark> placemarks =
                             await placemarkFromCoordinates(
-                                cameraPosition!.target.latitude,
-                                cameraPosition!.target.longitude);
+                          cameraPosition!.target.latitude,
+                          cameraPosition!.target.longitude,
+                        );
                         setState(() {
                           //get place name from lat and lang
                           _lat = cameraPosition!.target.latitude;
@@ -255,13 +291,26 @@ class _SetLocationState extends State<SetLocation> {
                     );
                   }
                 }),
-                Align(
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.location_on,
-                    color: Theme.of(context).primaryColor,
+                Container(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      currentLocation();
+                      mapStyleController?.animateCamera(
+                          CameraUpdate.newCameraPosition(CameraPosition(
+                              target: LatLng(_currentCoordinate.latitude,
+                                  _currentCoordinate.longitude),
+                              zoom: 15)));
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.gps_fixed_rounded,
+                        size: 36,
+                      ),
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ),

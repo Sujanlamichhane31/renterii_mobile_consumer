@@ -1,21 +1,26 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:ui' as ui;
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/home/presentation/widgets/categories_list_view.dart';
 import 'package:renterii/home/presentation/widgets/shop_box.dart';
 import 'package:renterii/map_utils.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
+import 'package:renterii/utils/constant.dart';
+import 'package:renterii/utils/location_access.dart';
 
 import '../../../Themes/colors.dart';
+import '../../../authentication/presentation/widgets/bottom_bar.dart';
 import '../../../routes/app_router.gr.dart';
 import '../../../shared/map/business_logic/map_bloc.dart';
 
@@ -53,7 +58,24 @@ class _RenteriiMapState extends State<RenteriiMap> {
   final Completer<GoogleMapController> _mapController = Completer();
   GoogleMapController? mapController;
   double distanceBetween = 300.0;
+  CameraPosition? cameraPosition;
+
   dynamic user;
+  LatLng _currentCoordinate = LocationAccess().currentCoordinate;
+
+  @override
+  void initState() {
+    super.initState();
+    user = context.read<UserCubit>().state.user;
+    customMarker();
+    currentLocation();
+    context.read<MapBloc>().add(
+          FetchMapMarkers(
+            userLatitude: user.latitude,
+            userLongitude: user.longitude,
+          ),
+        );
+  }
 
   double getDistance(double lat2, double lon2) {
     if (user != null && user.latitude != null && user.longitude != null) {
@@ -68,19 +90,60 @@ class _RenteriiMapState extends State<RenteriiMap> {
   List<Shop> shopList = [];
 
   List<Marker> markerList = [];
+  List<Marker> categoryMarkerList = [];
 
-  shopAround(List<Shop> shops) {
-    shopList.clear();
-    shopList =
-        shops.where((shop) => getDistance(shop.lat, shop.lng) <= 300).toList();
-    addMarker(shopList);
+  currentLocation() async {
+    await LocationAccess().requestLocationPermission();
+    final status = await Permission.locationWhenInUse.request();
+    address = await LocationAccess().getCurrentLocation();
+    _currentCoordinate = await LocationAccess().getCurrentLatLng();
+    customMarker();
   }
 
-  addMarker(List<Shop> result) {
-    markerList.clear();
+  customMarker() async {
+    Future<Uint8List> getBytesFromAsset(String path, int width) async {
+      ByteData data = await rootBundle.load(path);
+      ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+          targetWidth: width);
+      ui.FrameInfo fi = await codec.getNextFrame();
+      return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+    }
+
+    final Uint8List markerbitmap =
+        await getBytesFromAsset('images/logo_marker.png', 90);
+    markerList.add(Marker(
+        markerId: MarkerId(currentAddress),
+        icon: BitmapDescriptor.fromBytes(markerbitmap),
+        position:
+            LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
+    categoryMarkerList.add(Marker(
+        markerId: MarkerId(currentAddress),
+        icon: BitmapDescriptor.fromBytes(markerbitmap),
+        position:
+            LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
+  }
+
+  addMarker({required List<Shop> result, required bool isCategory}) {
+    markerList
+        .removeWhere((element) => element.markerId.value != currentAddress);
+    categoryMarkerList
+        .removeWhere((element) => element.markerId.value != currentAddress);
+
     for (var index = 0; index < result.length; index++) {
       log("result: ${result[index].title},${result[index].address}");
       if (result[index].lat != 0.0 && result[index].lng != 0.0) {
+        if (isCategory) {
+          categoryMarkerList.add(Marker(
+              markerId: MarkerId(result[index].id.toString()),
+              position: LatLng(
+                result[index].lat,
+                result[index].lng,
+              ),
+              infoWindow: InfoWindow(
+                  title: "${result[index].title}, ${result[index].address}")));
+        }
         markerList.add(Marker(
             markerId: MarkerId(result[index].id.toString()),
             position: LatLng(
@@ -89,43 +152,39 @@ class _RenteriiMapState extends State<RenteriiMap> {
             ),
             infoWindow: InfoWindow(
                 title: "${result[index].title}, ${result[index].address}")));
-        log("latitude: ${result[index].lat}");
       }
     }
-    for (var i in markerList) {
-      log('marker: ${i.position.latitude}}');
-    }
-    return markerList;
+    customMarker();
+    return isCategory ? categoryMarkerList : markerList;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    user = context.read<UserCubit>().state.user;
-    context.read<MapBloc>().add(
-          FetchMapMarkers(
-            userLatitude: user.latitude,
-            userLongitude: user.longitude,
-          ),
-        );
+  shopAround({required List<Shop> shops, required BuildContext context}) {
+    shopList.clear();
+    shopList =
+        shops.where((shop) => getDistance(shop.lat, shop.lng) <= 300).toList();
+    if (shopList.isEmpty) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Searching shops?"),
+              content: const Text("No shops Near 300KM from you!"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Okay"))
+              ],
+            );
+          });
+    }
   }
 
   @override
   void dispose() {
     mapController?.dispose();
     super.dispose();
-  }
-
-  Future<LatLng> getCenter() async {
-    final GoogleMapController controller = await _mapController.future;
-    LatLngBounds visibleRegion = await controller.getVisibleRegion();
-    LatLng centerLatLng = LatLng(
-      (visibleRegion.northeast.latitude + visibleRegion.southwest.latitude) / 2,
-      (visibleRegion.northeast.longitude + visibleRegion.southwest.longitude) /
-          2,
-    );
-
-    return centerLatLng;
   }
 
   @override
@@ -200,39 +259,119 @@ class _RenteriiMapState extends State<RenteriiMap> {
                           BlocBuilder<ShopCubit, ShopState>(
                               builder: (context, state) {
                             if (state is ShopLoaded) {
-                              addMarker(state.shops);
-                              return GoogleMap(
-                                markers: Set<Marker>.of(markerList),
-                                mapType: MapType.normal,
-                                // myLocationEnabled: true,
-                                // myLocationButtonEnabled: true,
-                                onCameraMove: (cameraPosition) {},
-                                initialCameraPosition: (user.latitude == null &&
-                                        user.latitude == 0.0)
-                                    ? kGooglePlex
-                                    : CameraPosition(
-                                        target: LatLng(
-                                            user.latitude, user.longitude),
-                                        zoom: 16),
-                                onMapCreated:
-                                    (GoogleMapController controller) async {
-                                  _mapController.complete(controller);
-                                },
+                              addMarker(result: state.shops, isCategory: false);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                shopAround(
+                                    shops: state.shops, context: context);
+                              });
+                              return Stack(
+                                children: [
+                                  GoogleMap(
+                                    markers: Set<Marker>.of(markerList),
+                                    mapType: MapType.normal,
+                                    zoomControlsEnabled: false,
+                                    onCameraMove: (cameraPositiona) {
+                                      cameraPosition = cameraPositiona;
+                                    },
+                                    initialCameraPosition:
+                                        _currentCoordinate.latitude == null
+                                            ? kGooglePlex
+                                            : CameraPosition(
+                                                target: LatLng(
+                                                    _currentCoordinate.latitude,
+                                                    _currentCoordinate
+                                                        .longitude),
+                                                zoom: 15),
+                                    onMapCreated: (controller) {
+                                      //method called when map is created
+                                      setState(() {
+                                        mapController = controller;
+                                      });
+                                    },
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        currentLocation();
+                                        mapController?.animateCamera(
+                                            CameraUpdate.newCameraPosition(
+                                                CameraPosition(
+                                                    target: LatLng(
+                                                        _currentCoordinate
+                                                            .latitude,
+                                                        _currentCoordinate
+                                                            .longitude),
+                                                    zoom: 15)));
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.gps_fixed_rounded,
+                                          size: 36,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               );
                             } else if (state is ShopsByCategoryLoaded) {
-                              addMarker(state.shops);
+                              addMarker(result: state.shops, isCategory: true);
 
-                              return GoogleMap(
-                                markers: Set<Marker>.of(markerList),
-                                mapType: MapType.normal,
-                                myLocationEnabled: true,
-                                myLocationButtonEnabled: true,
-                                onCameraMove: (cameraPosition) {},
-                                initialCameraPosition: kGooglePlex,
-                                onMapCreated:
-                                    (GoogleMapController controller) async {
-                                  _mapController.complete(controller);
-                                },
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                shopAround(
+                                    shops: state.shops, context: context);
+                              });
+                              return Stack(
+                                children: [
+                                  GoogleMap(
+                                    markers: Set<Marker>.of(categoryMarkerList),
+                                    mapType: MapType.normal,
+                                    zoomControlsEnabled: false,
+                                    onCameraMove: (cameraPositiona) {
+                                      cameraPosition = cameraPositiona;
+                                    },
+                                    initialCameraPosition:
+                                        _currentCoordinate.latitude == null
+                                            ? kGooglePlex
+                                            : CameraPosition(
+                                                target: LatLng(
+                                                    _currentCoordinate.latitude,
+                                                    _currentCoordinate
+                                                        .longitude),
+                                                zoom: 15),
+                                    onMapCreated: (controller) {
+                                      //method called when map is created
+                                      setState(() {
+                                        mapController = controller;
+                                      });
+                                    },
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        currentLocation();
+                                        mapController?.animateCamera(
+                                            CameraUpdate.newCameraPosition(
+                                                CameraPosition(
+                                                    target: LatLng(
+                                                        _currentCoordinate
+                                                            .latitude,
+                                                        _currentCoordinate
+                                                            .longitude),
+                                                    zoom: 15)));
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.gps_fixed_rounded,
+                                          size: 36,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               );
                             } else {
                               return const Center(
@@ -304,9 +443,18 @@ class _RenteriiMapState extends State<RenteriiMap> {
                                       "Shops around 300 KM from you",
                                       style: TextStyle(fontSize: 8.0),
                                     )
-                                  : const Text(
-                                      "No Shops around 300 KM from you",
-                                      style: TextStyle(fontSize: 8.0),
+                                  : Column(
+                                      children: [
+                                        const Text(
+                                          "No Shops around 300 KM from you",
+                                          style: TextStyle(fontSize: 8.0),
+                                        ),
+                                        BottomBar(
+                                            text: "Go to Home Screen",
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            })
+                                      ],
                                     ),
                               aroundShops.isNotEmpty
                                   ? const SizedBox(
@@ -345,9 +493,18 @@ class _RenteriiMapState extends State<RenteriiMap> {
                                       "Shops around 300 KM from you",
                                       style: TextStyle(fontSize: 8.0),
                                     )
-                                  : const Text(
-                                      "No Shops around 300 KM from you",
-                                      style: TextStyle(fontSize: 8.0),
+                                  : Column(
+                                      children: [
+                                        const Text(
+                                          " around 300 KM from you",
+                                          style: TextStyle(fontSize: 8.0),
+                                        ),
+                                        BottomBar(
+                                            text: "Go to Home Screen",
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            })
+                                      ],
                                     ),
                               aroundShops.isNotEmpty
                                   ? const SizedBox(

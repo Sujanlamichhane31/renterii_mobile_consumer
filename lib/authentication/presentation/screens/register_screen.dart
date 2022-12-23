@@ -8,6 +8,7 @@ import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/authentication/business_logic/cubit/signup/signup_cubit.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/authentication/presentation/screens/location_screen.dart';
+import 'package:renterii/authentication/presentation/screens/register_location_screen.dart';
 import 'package:renterii/authentication/presentation/widgets/profile_image.dart';
 import 'package:renterii/authentication/presentation/widgets/register_text_field.dart';
 import 'package:renterii/utils/constant.dart';
@@ -311,7 +312,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => LocationScreen(
+                              builder: (_) => RegisterLocationScreen(
                                     textEditingController: _addressController,
                                   )));
                       lat = result["lat"];

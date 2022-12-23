@@ -13,6 +13,7 @@ import 'package:renterii/routes/app_router.gr.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
 import 'package:renterii/shops/presentation/screens/deals_screen.dart';
+import 'package:renterii/utils/constant.dart';
 import '../widgets/booking_row.dart';
 
 // import 'booking_row.dart';
@@ -132,12 +133,12 @@ class _HomeState extends State<Home> {
               child: BlocBuilder<CategoryCubit, CategoryState>(
                 builder: (context, state) {
                   if (state is CategoryLoaded) {
-                    state.categories.first.name == "Near Me"
+                    state.categories.first.name == nearMe
                         ? state.categories
                         : state.categories.insert(
                             0,
                             ShopCategory(
-                                name: "Near Me", id: state.categories[0].id));
+                                name: nearMe, id: state.categories[0].id));
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -176,8 +177,7 @@ class _HomeState extends State<Home> {
                                 context.router.push(ShopsScreenRoute(
                                     pageTitle: e.name,
                                     isBooking: false,
-                                    categoryId: e.id!)
-                                    );
+                                    categoryId: e.id!));
                               },
                             );
                           })

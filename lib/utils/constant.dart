@@ -31,3 +31,6 @@ final List<Reach> reach = [
   Reach("5+ Person"),
   Reach("10+ Persons"),
 ];
+
+const String currentAddress = "Current Address";
+const String nearMe = "Near Me";
