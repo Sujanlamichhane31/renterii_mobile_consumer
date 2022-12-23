@@ -6,6 +6,7 @@ import 'package:renterii/Themes/colors.dart';
 import 'package:renterii/routes/app_router.gr.dart';
 
 import '../../../authentication/presentation/widgets/bottom_bar.dart';
+import 'my_orders_screen.dart';
 
 class ThankYouScreen extends StatelessWidget {
   const ThankYouScreen({Key? key}) : super(key: key);
@@ -42,14 +43,21 @@ class ThankYouScreen extends StatelessWidget {
                   .subtitle2!
                   .copyWith(color: kDisabledColor, fontSize: 18),
             ),
-        const    Spacer(
+            const Spacer(
                 // flex: 2,
                 ),
             BottomBar(
-              text: AppLocalizations.of(context)!.orderText,
-              onTap: () =>
-                  context.router.popAndPush(const MyOrdersScreenRoute()),
-            )
+                text: AppLocalizations.of(context)!.orderText,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MyOrdersScreen()),
+                  );
+                })
           ],
         ),
         beginOffset: const Offset(0.0, 0.3),
