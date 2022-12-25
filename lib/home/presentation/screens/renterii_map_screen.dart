@@ -67,7 +67,6 @@ class _RenteriiMapState extends State<RenteriiMap> {
   void initState() {
     super.initState();
     user = context.read<UserCubit>().state.user;
-    customMarker();
     currentLocation();
     context.read<MapBloc>().add(
           FetchMapMarkers(
@@ -97,6 +96,7 @@ class _RenteriiMapState extends State<RenteriiMap> {
     final status = await Permission.locationWhenInUse.request();
     address = await LocationAccess().getCurrentLocation();
     _currentCoordinate = await LocationAccess().getCurrentLatLng();
+    setState(() {});
     customMarker();
   }
 
@@ -114,12 +114,12 @@ class _RenteriiMapState extends State<RenteriiMap> {
     final Uint8List markerbitmap =
         await getBytesFromAsset('images/logo_marker.png', 90);
     markerList.add(Marker(
-        markerId: MarkerId(currentAddress),
+        markerId: const MarkerId(currentAddress),
         icon: BitmapDescriptor.fromBytes(markerbitmap),
         position:
             LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
     categoryMarkerList.add(Marker(
-        markerId: MarkerId(currentAddress),
+        markerId: const MarkerId(currentAddress),
         icon: BitmapDescriptor.fromBytes(markerbitmap),
         position:
             LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));

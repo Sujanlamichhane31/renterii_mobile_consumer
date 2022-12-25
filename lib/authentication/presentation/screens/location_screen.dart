@@ -74,7 +74,6 @@ class _SetLocationState extends State<SetLocation> {
   bool isCard = false;
   final Completer<GoogleMapController> _mapController = Completer();
   GoogleMapController? mapController;
-  Set<Marker> _markers = {};
   String address = '';
   late LatLng latLng;
   LatLng _currentCoordinate = LocationAccess().currentCoordinate;
