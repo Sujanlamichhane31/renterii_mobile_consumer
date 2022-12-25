@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,7 +67,10 @@ class _AppState extends State<App> {
                 selectedLabelStyle:
                     const TextStyle(fontWeight: FontWeight.bold),
                 currentIndex: tabsRouter.activeIndex,
-                onTap: tabsRouter.setActiveIndex,
+                onTap: (index) {
+                  // here we switch between tabs
+                  tabsRouter.setActiveIndex(index);
+                },
                 items: [
                   const BottomNavigationBarItem(
                       icon: Icon(Icons.home), label: 'Home'),

@@ -109,17 +109,16 @@ class _ShopScreenState extends State<ShopScreen> {
     packagesList.clear();
   }
 
+  final List<Tab> tabs = <Tab>[
+    // const Tab(text: 'Jordan Shop'),
+    const Tab(text: 'Items'),
+    const Tab(text: 'Spaces'),
+    const Tab(text: 'Lodging'),
+    const Tab(text: 'Experience'),
+    const Tab(text: 'Packages'),
+  ];
   @override
   Widget build(BuildContext context) {
-    final List<Tab> tabs = <Tab>[
-      // const Tab(text: 'Jordan Shop'),
-      const Tab(text: 'Items'),
-      const Tab(text: 'Spaces'),
-      const Tab(text: 'Lodging'),
-      const Tab(text: 'Experience'),
-      const Tab(text: 'Packages'),
-    ];
-
     return Material(
       child: Stack(
         children: <Widget>[
@@ -133,6 +132,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       icon: const Icon(
                         Icons.chevron_left,
                         size: 30,
+                        color: Colors.black,
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -154,7 +154,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           } else {
                             context.router.push(ReviewsScreenRoute(
                                 shopName: widget.name,
-                                ratings: [],
+                                ratings: const [],
                                 ratingNumber: widget.rating,
                                 username: '',
                                 numberOfReviews: 0));
@@ -179,7 +179,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                   const SizedBox(
                                     height: 10.0,
                                   ),
-                                  Text('${widget.description ?? ''}',
+                                  Text(widget.description ?? '',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style:
@@ -204,18 +204,32 @@ class _ShopScreenState extends State<ShopScreen> {
                                               .textTheme
                                               .overline!
                                               .copyWith(color: kMainColor)),
-                                      Text('${widget.address ?? 'No address'}',
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(widget.address ?? 'No address',
                                           style: Theme.of(context)
                                               .textTheme
                                               .overline),
                                       const Spacer(),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Row(
+                                    children: [
                                       const Icon(
                                         Icons.star,
                                         color: Color(0xff7ac81e),
                                         size: 13,
                                       ),
                                       const SizedBox(width: 8.0),
-                                      Text('${widget.rating}',
+                                      Text(widget.rating,
                                           style: Theme.of(context)
                                               .textTheme
                                               .overline!
@@ -234,7 +248,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                         size: 10,
                                       ),
                                     ],
-                                  ),
+                                  )
                                 ],
                               ),
                             ),

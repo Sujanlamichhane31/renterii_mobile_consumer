@@ -92,8 +92,9 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
                   totalAmount: totalAmount,
                   userId: id,
                 );
-            context.router.pushAndPopUntil(const ThankYouScreenRoute(),
-                predicate: (route) => route.isFirst);
+            context.router.replace(
+              const ThankYouScreenRoute(),
+            );
           }
         },
         child: FadedSlideAnimation(
@@ -576,9 +577,9 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
     BuildContext context,
   ) {
     if (orderProduct.product.rentalDuration.isNotEmpty) {
-      rentDuration = '${orderProduct.product.rentalDuration}';
+      rentDuration = orderProduct.product.rentalDuration;
     } else {
-      rentDuration = '${orderProduct.product.rentalDuration}';
+      rentDuration = orderProduct.product.rentalDuration;
     }
     log('order product: ${orderProduct.product.toString()}');
     return Column(
