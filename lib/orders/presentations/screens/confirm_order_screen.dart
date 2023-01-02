@@ -99,7 +99,6 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
         },
         child: FadedSlideAnimation(
           child: BlocBuilder<OrderCubit, OrderState>(builder: (context, state) {
-            final userAddress = context.read<UserCubit>().state.user.address;
             if (state.orderInProgress != null) {
               subTotal = 0;
 
@@ -695,7 +694,5 @@ class _ConfirmOrderState extends State<ConfirmOrderScreen> {
     );
   }
 
-  _onPressed() {
-    log('pressed:');
-  }
+
 }

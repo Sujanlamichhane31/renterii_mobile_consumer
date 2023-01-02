@@ -83,7 +83,7 @@ class OrderCubit extends Cubit<OrderState> {
         (element) => element.product.ref == orderProduct.product.ref);
 
     final orderProducts = [...orderInProgress.products];
-    orderProducts[orderProductToUpdateIndex!].quantity = newQuantity;
+    orderProducts[orderProductToUpdateIndex].quantity = newQuantity;
 
     emit(
       state.copyWith(

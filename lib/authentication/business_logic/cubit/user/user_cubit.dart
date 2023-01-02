@@ -60,7 +60,6 @@ class UserCubit extends HydratedCubit<UserState> {
       final UserCredential userCredentials =
           await FirebaseAuth.instance.signInWithCredential(authCredentials);
 
-      final token = await userCredentials.user!.getIdToken();
 
       // emit(
       //   state.copyWith(
@@ -175,13 +174,13 @@ class UserCubit extends HydratedCubit<UserState> {
       if (!userData['isNewUser']) {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        sharedPreferences.setString("userId", "${state.user.id}");
+        sharedPreferences.setString("userId", state.user.id);
 
         fetchUserProfile();
       } else {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        sharedPreferences.setString("userId", "${state.user.id}");
+        sharedPreferences.setString("userId", state.user.id);
       }
     } catch (error, stackTrace) {
       log('VERIFY OTP ERROR $error');
@@ -222,12 +221,12 @@ class UserCubit extends HydratedCubit<UserState> {
       if (!isNewUser) {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        sharedPreferences.setString("userId", "${state.user.id}");
+        sharedPreferences.setString("userId", state.user.id);
         fetchUserProfile();
       } else {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        sharedPreferences.setString("userId", "${state.user.id}");
+        sharedPreferences.setString("userId", state.user.id);
       }
     } catch (error, s) {
       log("$error");
