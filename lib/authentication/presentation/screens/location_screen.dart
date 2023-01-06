@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animarker/flutter_map_marker_animation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,6 +19,7 @@ import 'package:renterii/map_utils.dart';
 import 'package:renterii/rentals/business_logic/cubit/order_bloc.dart';
 import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
+import 'package:renterii/utils/constant.dart';
 import 'package:renterii/utils/location_access.dart';
 import '../../../shared/map/business_logic/map_bloc.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -100,10 +102,10 @@ class _SetLocationState extends State<SetLocation> {
   List<Shop> shopList = [];
 
   List<Marker> markerList = [];
+  List<Marker> shopMarkerList = [];
 
   currentLocation() async {
     await LocationAccess().requestLocationPermission();
-    final status = await Permission.locationWhenInUse.request();
     address = await LocationAccess().getCurrentLocation();
     widget.textEditingController!.text = address;
     _currentCoordinate = await LocationAccess().getCurrentLatLng();
@@ -113,6 +115,7 @@ class _SetLocationState extends State<SetLocation> {
   }
 
   customMarker() async {
+    markerList.clear();
     Future<Uint8List> getBytesFromAsset(String path, int width) async {
       ByteData data = await rootBundle.load(path);
       ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
@@ -127,18 +130,20 @@ class _SetLocationState extends State<SetLocation> {
         await getBytesFromAsset('images/logo_marker.png', 90);
     widget.lat = _currentCoordinate.latitude;
     widget.long = _currentCoordinate.longitude;
-    markerList.add(Marker(
-        markerId: const MarkerId("current address"),
+    markerList.add(RippleMarker(
+        ripple: true,
+        markerId: const MarkerId(currentAddress),
         icon: BitmapDescriptor.fromBytes(markerbitmap),
         position:
             LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
   }
 
   addMarker(List<Shop> result) {
+    shopMarkerList.clear();
     for (var index = 0; index < result.length; index++) {
       log("result: ${result[index].title},${result[index].address}");
       if (result[index].lat != 0.0 && result[index].lng != 0.0) {
-        markerList.add(Marker(
+        shopMarkerList.add(Marker(
             markerId: MarkerId(result[index].id.toString()),
             position: LatLng(
               result[index].lat,
@@ -149,8 +154,7 @@ class _SetLocationState extends State<SetLocation> {
         log("latitude: ${result[index].lat}");
       }
     }
-    customMarker();
-    return markerList;
+    return shopMarkerList.toSet();
   }
 
   final TextEditingController _messageController = TextEditingController();
@@ -242,47 +246,60 @@ class _SetLocationState extends State<SetLocation> {
                 BlocBuilder<ShopCubit, ShopState>(builder: (context, state) {
                   if (state is ShopLoaded) {
                     addMarker(state.shops);
-                    return GoogleMap(
-                      //Map widget from google_maps_flutter package
-                      mapType: MapType.normal,
-                      markers: Set<Marker>.of(markerList),
-                      initialCameraPosition: widget.lat == null
-                          ? kGooglePlex
-                          : CameraPosition(
-                              target: LatLng(widget.lat!, widget.long!),
-                              zoom: 15),
-                      zoomControlsEnabled: false,
-                      onMapCreated: (controller) {
-                        //method called when map is created
-                        setState(() {
+                    return Animarker(
+                      rippleRadius: 0.28, //[0,1.0] range, how big is the circle
+                      rippleColor:
+                          Colors.pink[100]!, // Color of fade ripple circle
+                      rippleDuration: const Duration(milliseconds: 750),
+                      curve: Curves.ease,
+                      mapId: _mapController.future.then<int>(
+                          (value) => value.mapId), //Grab Google Map Id
+                      markers: Set.of(markerList),
+                      child: GoogleMap(
+                        //Map widget from google_maps_flutter package
+                        mapType: MapType.normal,
+                        markers: Set<Marker>.of(shopMarkerList),
+                        initialCameraPosition: widget.lat == null
+                            ? kGooglePlex
+                            : CameraPosition(
+                                target: LatLng(widget.lat!, widget.long!),
+                                zoom: 15),
+                        zoomControlsEnabled: false,
+                        onMapCreated: (controller) {
+                          //method called when map is created
+                          // setState(() {
                           mapStyleController = controller;
-                        });
-                      },
-                      onCameraMove: (CameraPosition cameraPositiona) {
-                        cameraPosition = cameraPositiona; //when map is dragging
-                      },
-                      onCameraIdle: () async {
-                        //when map drag stops
-                        List<Placemark> placemarks =
-                            await placemarkFromCoordinates(
-                          cameraPosition!.target.latitude,
-                          cameraPosition!.target.longitude,
-                        );
-                        setState(() {
-                          //get place name from lat and lang
-                          _lat = cameraPosition!.target.latitude;
-                          _lang = cameraPosition!.target.longitude;
-                          widget.textEditingController!.text = location;
-                          location =
-                              "${placemarks.first.street.toString()},${placemarks.first.subLocality.toString()},${placemarks.first.subAdministrativeArea.toString()},${placemarks.first.administrativeArea.toString()}";
-                          log(location);
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            // Do something
-
+                          _mapController.complete(controller);
+                          // });
+                        },
+                        onCameraMove: (CameraPosition cameraPositiona) {
+                          cameraPosition =
+                              cameraPositiona; //when map is dragging
+                        },
+                        onCameraIdle: () async {
+                          //when map drag stops
+                          List<Placemark> placemarks =
+                              await placemarkFromCoordinates(
+                            cameraPosition!.target.latitude,
+                            cameraPosition!.target.longitude,
+                          );
+                          setState(() {
+                            //get place name from lat and lang
+                            _lat = cameraPosition!.target.latitude;
+                            _lang = cameraPosition!.target.longitude;
                             widget.textEditingController!.text = location;
+                            location =
+                                "${placemarks.first.street.toString()},${placemarks.first.subLocality.toString()},${placemarks.first.subAdministrativeArea.toString()},${placemarks.first.administrativeArea.toString()}";
+                            log(location);
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              // Do something
+
+                              widget.textEditingController!.text = location;
+                            });
                           });
-                        });
-                      },
+                        },
+                      ),
                     );
                   } else {
                     return const Center(

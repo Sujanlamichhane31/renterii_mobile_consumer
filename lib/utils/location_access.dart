@@ -33,7 +33,6 @@ class LocationAccess {
       List<Placemark> p =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       currentCoordinate = LatLng(position.latitude, position.longitude);
-
       return currentCoordinate;
     }).catchError((e) {
       debugPrint('Location error $e');

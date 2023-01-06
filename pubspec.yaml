@@ -62,6 +62,7 @@ dependencies:
   number_display: ^3.0.0
   flutter_google_places: ^0.3.0
   permission_handler: ^10.2.0
+  flutter_animarker: ^3.2.0
 
 #  bitmap: ^0.1.2
 

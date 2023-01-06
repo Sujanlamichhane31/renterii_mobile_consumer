@@ -6,10 +6,11 @@ import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animarker/core/ripple_marker.dart';
+import 'package:flutter_animarker/flutter_map_marker_animation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:renterii/authentication/business_logic/cubit/user/user_cubit.dart';
 import 'package:renterii/home/presentation/widgets/categories_list_view.dart';
 import 'package:renterii/home/presentation/widgets/shop_box.dart';
@@ -18,7 +19,6 @@ import 'package:renterii/shops/business_logic/cubit/shop_cubit.dart';
 import 'package:renterii/shops/data/models/shop.dart';
 import 'package:renterii/utils/constant.dart';
 import 'package:renterii/utils/location_access.dart';
-
 import '../../../Themes/colors.dart';
 import '../../../authentication/presentation/widgets/bottom_bar.dart';
 import '../../../routes/app_router.gr.dart';
@@ -52,7 +52,8 @@ class RenteriiMap extends StatefulWidget {
   _RenteriiMapState createState() => _RenteriiMapState();
 }
 
-class _RenteriiMapState extends State<RenteriiMap> {
+class _RenteriiMapState extends State<RenteriiMap>
+    with SingleTickerProviderStateMixin {
   HttpClient httpClient = HttpClient();
   bool isCard = false;
   final Completer<GoogleMapController> _mapController = Completer();
@@ -89,18 +90,20 @@ class _RenteriiMapState extends State<RenteriiMap> {
   List<Shop> shopList = [];
 
   List<Marker> markerList = [];
+  List<Marker> markerList1 = [];
+
   List<Marker> categoryMarkerList = [];
 
   currentLocation() async {
     await LocationAccess().requestLocationPermission();
-    final status = await Permission.locationWhenInUse.request();
     address = await LocationAccess().getCurrentLocation();
     _currentCoordinate = await LocationAccess().getCurrentLatLng();
     setState(() {});
-    customMarker();
+    await customMarker();
   }
 
   customMarker() async {
+    _currentCoordinate = await LocationAccess().getCurrentLatLng();
     Future<Uint8List> getBytesFromAsset(String path, int width) async {
       ByteData data = await rootBundle.load(path);
       ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
@@ -113,12 +116,21 @@ class _RenteriiMapState extends State<RenteriiMap> {
 
     final Uint8List markerbitmap =
         await getBytesFromAsset('images/logo_marker.png', 90);
-    markerList.add(Marker(
-        markerId: const MarkerId(currentAddress),
-        icon: BitmapDescriptor.fromBytes(markerbitmap),
-        position:
-            LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
-    categoryMarkerList.add(Marker(
+    if (markerList1.isEmpty) {
+      markerList1.add(RippleMarker(
+          markerId: const MarkerId(currentAddress),
+          icon: BitmapDescriptor.fromBytes(markerbitmap),
+          ripple: true,
+          position: LatLng(
+              _currentCoordinate.latitude, _currentCoordinate.longitude)));
+    }
+
+    // Marker(
+    //   markerId: const MarkerId(currentAddress),
+    //   icon: BitmapDescriptor.fromBytes(markerbitmap),
+    //   position:
+    //       LatLng(_currentCoordinate.latitude, _currentCoordinate.longitude)));
+    categoryMarkerList.add(RippleMarker(
         markerId: const MarkerId(currentAddress),
         icon: BitmapDescriptor.fromBytes(markerbitmap),
         position:
@@ -184,6 +196,7 @@ class _RenteriiMapState extends State<RenteriiMap> {
   @override
   void dispose() {
     mapController?.dispose();
+
     super.dispose();
   }
 
@@ -266,28 +279,38 @@ class _RenteriiMapState extends State<RenteriiMap> {
                               });
                               return Stack(
                                 children: [
-                                  GoogleMap(
-                                    markers: Set<Marker>.of(markerList),
-                                    mapType: MapType.normal,
-                                    zoomControlsEnabled: false,
-                                    onCameraMove: (cameraPositiona) {
-                                      cameraPosition = cameraPositiona;
-                                    },
-                                    initialCameraPosition:
-                                        _currentCoordinate.latitude == null
-                                            ? kGooglePlex
-                                            : CameraPosition(
-                                                target: LatLng(
-                                                    _currentCoordinate.latitude,
-                                                    _currentCoordinate
-                                                        .longitude),
-                                                zoom: 15),
-                                    onMapCreated: (controller) {
-                                      //method called when map is created
-                                      setState(() {
-                                        mapController = controller;
-                                      });
-                                    },
+                                  Animarker(
+                                    rippleRadius:
+                                        0.28, //[0,1.0] range, how big is the circle
+                                    rippleColor: Colors.pink[
+                                        100]!, // Color of fade ripple circle
+                                    rippleDuration:
+                                        const Duration(milliseconds: 750),
+                                    curve: Curves.ease,
+                                    mapId: _mapController.future.then<int>(
+                                        (value) =>
+                                            value.mapId), //Grab Google Map Id
+                                    markers: Set.of(markerList1),
+                                    child: GoogleMap(
+                                      markers: Set<Marker>.of(markerList),
+                                      mapType: MapType.normal,
+                                      zoomControlsEnabled: false,
+                                      onCameraMove: (cameraPositiona) {
+                                        cameraPosition = cameraPositiona;
+                                      },
+                                      initialCameraPosition: CameraPosition(
+                                          target: LatLng(
+                                              _currentCoordinate.latitude,
+                                              _currentCoordinate.longitude),
+                                          zoom: 15),
+                                      onMapCreated: (controller) {
+                                        //method called when map is created
+                                        setState(() {
+                                          mapController = controller;
+                                          _mapController.complete(controller);
+                                        });
+                                      },
+                                    ),
                                   ),
                                   Container(
                                     alignment: Alignment.bottomRight,
@@ -317,35 +340,49 @@ class _RenteriiMapState extends State<RenteriiMap> {
                               );
                             } else if (state is ShopsByCategoryLoaded) {
                               addMarker(result: state.shops, isCategory: true);
-
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 shopAround(
                                     shops: state.shops, context: context);
                               });
                               return Stack(
                                 children: [
-                                  GoogleMap(
-                                    markers: Set<Marker>.of(categoryMarkerList),
-                                    mapType: MapType.normal,
-                                    zoomControlsEnabled: false,
-                                    onCameraMove: (cameraPositiona) {
-                                      cameraPosition = cameraPositiona;
-                                    },
-                                    initialCameraPosition:
-                                        _currentCoordinate.latitude == null
-                                            ? kGooglePlex
-                                            : CameraPosition(
-                                                target: LatLng(
-                                                    _currentCoordinate.latitude,
-                                                    _currentCoordinate
-                                                        .longitude),
-                                                zoom: 15),
-                                    onMapCreated: (controller) {
-                                      //method called when map is created
-                                      setState(() {
-                                        mapController = controller;
-                                      });
-                                    },
+                                  Animarker(
+                                    rippleRadius:
+                                        0.28, //[0,1.0] range, how big is the circle
+                                    rippleColor: Colors.pink[
+                                        100]!, // Color of fade ripple circle
+                                    rippleDuration:
+                                        const Duration(milliseconds: 750),
+                                    curve: Curves.ease,
+                                    mapId: _mapController.future.then<int>(
+                                        (value) =>
+                                            value.mapId), //Grab Google Map Id
+                                    markers: Set.of(markerList1),
+                                    child: GoogleMap(
+                                      markers:
+                                          Set<Marker>.of(categoryMarkerList),
+                                      mapType: MapType.normal,
+                                      zoomControlsEnabled: false,
+                                      onCameraMove: (cameraPositiona) {
+                                        cameraPosition = cameraPositiona;
+                                      },
+                                      initialCameraPosition: _currentCoordinate
+                                                  .latitude ==
+                                              null
+                                          ? kGooglePlex
+                                          : CameraPosition(
+                                              target: LatLng(
+                                                  _currentCoordinate.latitude,
+                                                  _currentCoordinate.longitude),
+                                              zoom: 15),
+                                      onMapCreated: (controller) {
+                                        //method called when map is created
+                                        setState(() {
+                                          mapController = controller;
+                                          _mapController.complete(controller);
+                                        });
+                                      },
+                                    ),
                                   ),
                                   Container(
                                     alignment: Alignment.bottomRight,

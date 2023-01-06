@@ -320,6 +320,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_animarker",
+      "rootUri": "file:///C:/Users/xuzan/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/flutter_animarker-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_bloc",
       "rootUri": "file:///C:/Users/xuzan/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/flutter_bloc-8.1.1",
       "packageUri": "lib/",
@@ -1136,7 +1142,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-12-25T15:50:02.926285Z",
+  "generated": "2023-01-06T12:52:27.778394Z",
   "generator": "pub",
   "generatorVersion": "2.18.2"
 }
